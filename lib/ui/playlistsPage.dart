@@ -113,7 +113,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                           addRepaintBoundaries: false,
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
+                            maxCrossAxisExtent: 250,
                             crossAxisSpacing: 20,
                             mainAxisSpacing: 20,
                           ),
@@ -220,54 +220,39 @@ class GetPlaylist extends StatelessWidget {
             },
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.only(right: 15),
-          child: SizedBox(
-            width: size.width * 0.4,
-            height: size.height * 0.18,
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              children: [
-                DecoratedBox(
-                  decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 6,
-                        color: Color.fromARGB(40, 0, 0, 0),
-                      )
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: image != ''
-                        ? CachedNetworkImage(
-                            width: size.width * 0.4,
-                            height: size.height * 0.18,
-                            imageUrl: image.toString(),
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) => DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(30, 255, 255, 255),
-                                    Color.fromARGB(30, 233, 233, 233),
-                                  ],
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    MdiIcons.musicNoteOutline,
-                                    size: 30,
-                                    color: accent,
-                                  ),
+        child: SizedBox(
+          width: size.width * 0.2,
+          height: size.width * 0.2,
+          child: Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              DecoratedBox(
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 6,
+                      color: Color.fromARGB(40, 0, 0, 0),
+                    )
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: image != ''
+                      ? CachedNetworkImage(
+                          width: size.width * 0.2,
+                          height: size.width * 0.2,
+                          imageUrl: image.toString(),
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => DecoratedBox(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color.fromARGB(30, 255, 255, 255),
+                                  Color.fromARGB(30, 233, 233, 233),
                                 ],
                               ),
                             ),
-                          )
-                        : Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -276,39 +261,51 @@ class GetPlaylist extends StatelessWidget {
                                   size: 30,
                                   color: accent,
                                 ),
-                                Text(
-                                  title,
-                                  style: TextStyle(color: accent),
-                                  textAlign: TextAlign.center,
-                                ),
                               ],
                             ),
                           ),
-                  ),
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                MdiIcons.musicNoteOutline,
+                                size: 30,
+                                color: accent,
+                              ),
+                              Text(
+                                title,
+                                style: TextStyle(color: accent),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
                 ),
-                Positioned.fill(
-                  child: Container(
-                    width: size.width * 0.4,
-                    height: size.height * 0.18,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color.fromARGB(30, 255, 255, 255),
-                          const Color.fromARGB(30, 233, 233, 233),
-                        ],
-                        begin: index.isOdd
-                            ? Alignment.bottomCenter
-                            : Alignment.topCenter,
-                        end: index.isOdd
-                            ? Alignment.topCenter
-                            : Alignment.bottomCenter,
-                      ),
+              ),
+              Positioned.fill(
+                child: Container(
+                  width: size.width * 0.2,
+                  height: size.width * 0.2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color.fromARGB(30, 255, 255, 255),
+                        const Color.fromARGB(30, 233, 233, 233),
+                      ],
+                      begin: index.isOdd
+                          ? Alignment.bottomCenter
+                          : Alignment.topCenter,
+                      end: index.isOdd
+                          ? Alignment.topCenter
+                          : Alignment.bottomCenter,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

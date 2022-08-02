@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             FutureBuilder(
-              future: getPlaylists(4),
+              future: getPlaylists(5),
               builder: (context, data) {
                 return data.hasData
                     ? Wrap(
@@ -175,8 +175,8 @@ class CubeContainer extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: size.height / 4.15,
-              width: size.width / 5.15,
+              height: size.width * 0.15,
+              width: size.width * 0.15,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
