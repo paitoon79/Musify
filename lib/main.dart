@@ -143,6 +143,7 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('settings');
   await Hive.openBox('user');
+  await Hive.openBox('cache');
   final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   version = packageInfo.version;
   runApp(const MyApp());
