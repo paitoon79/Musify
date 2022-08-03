@@ -41,12 +41,6 @@ class AppState extends State<Musify> {
   }
 
   @override
-  void dispose() {
-    audioPlayer?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final pages = [
       HomePage(),

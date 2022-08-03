@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:musify/helper/material_color_creator.dart';
+import 'package:musify/services/audio_manager.dart';
 import 'package:musify/style/appColors.dart';
 import 'package:musify/ui/rootPage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     Hive.close();
+    audioPlayer?.dispose();
     super.dispose();
   }
 
