@@ -27,7 +27,7 @@ class AppState extends State<Musify> {
     super.initState();
     audioPlayer!.processingStateStream.listen((state) async {
       if (state == ProcessingState.completed) {
-        await stop();
+        await pause();
         await audioPlayer!.seek(Duration.zero, index: 0);
       }
     });
