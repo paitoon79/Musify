@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/ui/player.dart';
 
-AudioPlayer? audioPlayer = AudioPlayer();
+AudioPlayer audioPlayer = AudioPlayer();
 
 final durationNotifier = ValueNotifier<Duration?>(Duration.zero);
 final buttonNotifier = ValueNotifier<MPlayerState>(MPlayerState.stopped);
@@ -16,11 +16,11 @@ final prefferedFileExtension = ValueNotifier<String>(
 final playNextSongAutomatically = ValueNotifier<bool>(false);
 
 bool get hasNext => activePlaylist.isEmpty
-    ? audioPlayer!.hasNext
+    ? audioPlayer.hasNext
     : id + 1 <= activePlaylist.length;
 
 bool get hasPrevious =>
-    activePlaylist.isEmpty ? audioPlayer!.hasPrevious : id - 1 >= 0;
+    activePlaylist.isEmpty ? audioPlayer.hasPrevious : id - 1 >= 0;
 
 String get durationText =>
     duration != null ? duration.toString().split('.').first : '';
@@ -30,11 +30,11 @@ String get positionText =>
 
 bool isMuted = false;
 
-Future<void>? play() => audioPlayer?.play();
+Future<void> play() => audioPlayer.play();
 
-Future<void>? pause() => audioPlayer?.pause();
+Future<void> pause() => audioPlayer.pause();
 
-Future<void>? stop() => audioPlayer?.stop();
+Future<void> stop() => audioPlayer.stop();
 
 Future playNext() async {
   if (id + 1 <= activePlaylist.length) {
@@ -57,9 +57,9 @@ Future<void> playSong(Map song) async {
 
 Future changeShuffleStatus() async {
   if (shuffleNotifier.value == true) {
-    await audioPlayer?.setShuffleModeEnabled(false);
+    await audioPlayer.setShuffleModeEnabled(false);
   } else {
-    await audioPlayer?.setShuffleModeEnabled(true);
+    await audioPlayer.setShuffleModeEnabled(true);
   }
 }
 
@@ -74,17 +74,17 @@ void changeAutoPlayNextStatus() {
 Future changeLoopStatus() async {
   if (repeatNotifier.value == false) {
     repeatNotifier.value = true;
-    await audioPlayer?.setLoopMode(LoopMode.one);
+    await audioPlayer.setLoopMode(LoopMode.one);
   } else {
     repeatNotifier.value = false;
-    await audioPlayer?.setLoopMode(LoopMode.off);
+    await audioPlayer.setLoopMode(LoopMode.off);
   }
 }
 
 Future mute(bool muted) async {
   if (muted) {
-    await audioPlayer?.setVolume(0);
+    await audioPlayer.setVolume(0);
   } else {
-    await audioPlayer?.setVolume(1);
+    await audioPlayer.setVolume(1);
   }
 }

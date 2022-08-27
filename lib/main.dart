@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     Hive.close();
-    audioPlayer?.dispose();
+    audioPlayer.dispose();
     super.dispose();
   }
 

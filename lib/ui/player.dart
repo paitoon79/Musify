@@ -36,9 +36,9 @@ class AudioAppState extends State<AudioApp> {
   void initState() {
     super.initState();
 
-    positionSubscription = audioPlayer?.positionStream
+    positionSubscription = audioPlayer.positionStream
         .listen((p) => {if (mounted) setState(() => position = p)});
-    audioPlayer?.durationStream.listen(
+    audioPlayer.durationStream.listen(
       (d) => {
         if (mounted) {setState(() => duration = d)}
       },
@@ -187,7 +187,7 @@ class AudioAppState extends State<AudioApp> {
                 value: position?.inMilliseconds.toDouble() ?? 0.0,
                 onChanged: (double? value) {
                   setState(() {
-                    audioPlayer!.seek(
+                    audioPlayer.seek(
                       Duration(
                         seconds: (value! / 1000).round(),
                       ),

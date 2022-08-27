@@ -25,15 +25,15 @@ class AppState extends State<Musify> {
   @override
   void initState() {
     super.initState();
-    audioPlayer!.processingStateStream.listen((state) async {
+    audioPlayer.processingStateStream.listen((state) async {
       if (state == ProcessingState.completed) {
         await pause();
-        await audioPlayer!.seek(Duration.zero, index: 0);
+        await audioPlayer.seek(Duration.zero, index: 0);
       }
     });
-    positionSubscription = audioPlayer?.positionStream
+    positionSubscription = audioPlayer.positionStream
         .listen((p) => {if (mounted) setState(() => position = p)});
-    audioPlayer?.durationStream.listen(
+    audioPlayer.durationStream.listen(
       (d) => {
         if (mounted) {setState(() => duration = d)}
       },
@@ -227,7 +227,7 @@ class AppState extends State<Musify> {
                         value: position?.inMilliseconds.toDouble() ?? 0.0,
                         onChanged: (double? value) {
                           setState(() {
-                            audioPlayer!.seek(
+                            audioPlayer.seek(
                               Duration(
                                 seconds: (value! / 1000).round(),
                               ),
@@ -297,7 +297,7 @@ class AppState extends State<Musify> {
                       onPressed: playPrevious,
                     ),
                     StreamBuilder<PlayerState>(
-                      stream: audioPlayer!.playerStateStream,
+                      stream: audioPlayer.playerStateStream,
                       builder: (context, snapshot) {
                         final playerState = snapshot.data;
                         final playing = playerState?.playing;
@@ -310,9 +310,9 @@ class AppState extends State<Musify> {
                           splashColor: Colors.transparent,
                           onPressed: () {
                             if (playing == true) {
-                              audioPlayer?.pause();
+                              audioPlayer.pause();
                             } else {
-                              audioPlayer?.play();
+                              audioPlayer.play();
                             }
                           },
                           iconSize: 45,

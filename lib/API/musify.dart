@@ -242,7 +242,7 @@ Future setSongDetails(song) async {
   }
 
   final audio = await getSongUrl(ytid);
-  await audioPlayer?.setUrl(audio);
+  await audioPlayer.setUrl(audio);
   kUrl.value = audio;
 }
 
