@@ -13,7 +13,6 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 final yt = YoutubeExplode();
 
 List ytplaylists = [];
-List searchedList = [];
 List playlists = [];
 List userPlaylists = Hive.box('user').get('playlists', defaultValue: []);
 List userLikedSongsList = Hive.box('user').get('likedSongs', defaultValue: []);
@@ -37,7 +36,7 @@ int id = 0;
 
 Future<List> fetchSongsList(String searchQuery) async {
   final List list = await yt.search.search(searchQuery);
-  searchedList = [
+  final searchedList = [
     for (final s in list)
       returnSongLayout(
         0,

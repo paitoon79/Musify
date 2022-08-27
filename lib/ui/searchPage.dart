@@ -18,23 +18,18 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchBar = TextEditingController();
   final ValueNotifier<bool> _fetchingSongs = ValueNotifier(false);
   final FocusNode _inputNode = FocusNode();
+  String _searchQuery = '';
 
   Future<void> search() async {
-    final searchQuery = _searchBar.text;
-    if (searchQuery.isEmpty) {
-      setState(() {
-        searchedList = [];
-      });
-      return;
+    _searchQuery = _searchBar.text;
+    if (_searchQuery.isNotEmpty) {
+      _fetchingSongs.value = true;
+      if (!searchHistory.contains(_searchQuery)) {
+        searchHistory.insert(0, _searchQuery);
+        addOrUpdateData('user', 'searchHistory', searchHistory);
+      }
+      _fetchingSongs.value = false;
     }
-
-    _fetchingSongs.value = true;
-    await fetchSongsList(searchQuery);
-    if (!searchHistory.contains(searchQuery)) {
-      searchHistory.insert(0, searchQuery);
-      addOrUpdateData('user', 'searchHistory', searchHistory);
-    }
-    _fetchingSongs.value = false;
     setState(() {});
   }
 
@@ -134,29 +129,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             const Padding(padding: EdgeInsets.only(top: 20)),
-            if (searchedList.isNotEmpty)
-              ListView.builder(
-                shrinkWrap: true,
-                addAutomaticKeepAlives: false,
-                addRepaintBoundaries: false,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: searchedList.length,
-                itemBuilder: (BuildContext ctxt, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      top: 5,
-                      bottom: 5,
-                      left: 50,
-                      right: 50,
-                    ),
-                    child: SongBar(
-                      searchedList[index],
-                      false,
-                    ),
-                  );
-                },
-              )
-            else if (searchedList.isEmpty && searchHistory.isNotEmpty)
+            if (_searchQuery.isEmpty)
               ListView.builder(
                 shrinkWrap: true,
                 addAutomaticKeepAlives: false,
@@ -185,6 +158,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         onTap: () async {
                           _fetchingSongs.value = true;
+                          _searchQuery = searchHistory[index];
                           await fetchSongsList(searchHistory[index]);
                           _fetchingSongs.value = false;
                           setState(() {});
@@ -192,6 +166,35 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ),
                   );
+                },
+              )
+            else
+              FutureBuilder(
+                future: fetchSongsList(_searchQuery),
+                builder: (context, data) {
+                  return (data as dynamic).data != null
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          addAutomaticKeepAlives: false,
+                          addRepaintBoundaries: false,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: (data as dynamic).data.length,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                top: 8,
+                                bottom: 6,
+                                left: 60,
+                                right: 60,
+                              ),
+                              child: SongBar(
+                                (data as dynamic).data[index],
+                                false,
+                              ),
+                            );
+                          },
+                        )
+                      : const Spinner();
                 },
               )
           ],
