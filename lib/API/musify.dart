@@ -37,9 +37,8 @@ int id = 0;
 
 Future<List> fetchSongsList(String searchQuery) async {
   final List list = await yt.search.search(searchQuery);
-  searchedList = [];
-  for (final s in list) {
-    searchedList.add(
+  searchedList = [
+    for (final s in list)
       returnSongLayout(
         0,
         s.id.toString(),
@@ -50,9 +49,9 @@ Future<List> fetchSongsList(String searchQuery) async {
         s.thumbnails.lowResUrl.toString(),
         s.thumbnails.maxResUrl.toString(),
         s.title.split('-')[0].toString(),
-      ),
-    );
-  }
+      )
+  ];
+
   return searchedList;
 }
 
@@ -288,17 +287,14 @@ Future getSongDetails(dynamic songIndex, dynamic songId) async {
 }
 
 Future getSongLyrics(String artist, String title) async {
-  if (_lastLyricsUrl !=
-      'https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}') {
-    if (await getData('cache',
-            'lyrics-https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}') !=
-        null) {
-      lyrics.value = await getData('cache',
-          'lyrics-https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}');
+  final String currentApiUrl =
+      'https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}';
+  if (_lastLyricsUrl != currentApiUrl) {
+    if (await getData('cache', 'lyrics-$currentApiUrl') != null) {
+      lyrics.value = await getData('cache', 'lyrics-$currentApiUrl');
     } else {
       lyrics.value = 'null';
-      _lastLyricsUrl =
-          'https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}';
+      _lastLyricsUrl = currentApiUrl;
       final response = await http.get(
         Uri.parse(_lastLyricsUrl),
         headers: {'Accept': 'application/json'},
