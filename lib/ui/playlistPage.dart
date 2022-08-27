@@ -10,7 +10,7 @@ import 'package:musify/customWidgets/spinner.dart';
 import 'package:musify/style/appColors.dart';
 
 class PlaylistPage extends StatefulWidget {
-  const PlaylistPage({Key? key, required this.playlist}) : super(key: key);
+  const PlaylistPage({super.key, required this.playlist});
   final dynamic playlist;
 
   @override
@@ -59,10 +59,10 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
   Future<List> fetch() async {
     final list = [];
-    final int _count = widget.playlist['list'].length as int;
+    final _count = widget.playlist['list'].length as int;
     final n = min(_itemsPerPage, _count - _currentPage * _itemsPerPage);
     await Future.delayed(const Duration(seconds: 1), () {
-      for (int i = 0; i < n; i++) {
+      for (var i = 0; i < n; i++) {
         list.add(widget.playlist['list'][_currentLastLoadedId]);
         _currentLastLoadedId++;
       }
@@ -181,17 +181,19 @@ class _PlaylistPageState extends State<PlaylistPage> {
                           Navigator.pop(context, false)
                         },
                         style: ElevatedButton.styleFrom(
-                            primary: accent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            minimumSize: const Size(50, 50)),
+                          primary: accent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          minimumSize: const Size(50, 50),
+                        ),
                         child: Text(
                           AppLocalizations.of(context)!.playAll.toUpperCase(),
                           style: TextStyle(
-                              color: accent != const Color(0xFFFFFFFF)
-                                  ? Colors.white
-                                  : Colors.black),
+                            color: accent != const Color(0xFFFFFFFF)
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -216,7 +218,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         }
                         return Padding(
                           padding: const EdgeInsets.only(
-                              top: 5, bottom: 5, left: 80, right: 80),
+                            top: 5,
+                            bottom: 5,
+                            left: 80,
+                            right: 80,
+                          ),
                           child: SongBar(
                             _songsList[index],
                             true,

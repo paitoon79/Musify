@@ -20,7 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   final FocusNode _inputNode = FocusNode();
 
   Future<void> search() async {
-    final String searchQuery = _searchBar.text;
+    final searchQuery = _searchBar.text;
     if (searchQuery.isEmpty) {
       setState(() {
         searchedList = [];
@@ -89,30 +89,36 @@ class _SearchPageState extends State<SearchPage> {
                     borderSide: BorderSide(color: accent),
                   ),
                   suffixIcon: ValueListenableBuilder<bool>(
-                      valueListenable: _fetchingSongs,
-                      builder: (_, value, __) {
-                        if (value == true) {
-                          return IconButton(
-                              icon: const SizedBox(
-                                  height: 18, width: 18, child: Spinner()),
-                              color: accent,
-                              onPressed: () {
-                                search();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              });
-                        } else {
-                          return IconButton(
-                              icon: Icon(
-                                Icons.search,
-                                color: accent,
-                              ),
-                              color: accent,
-                              onPressed: () {
-                                search();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              });
-                        }
-                      }),
+                    valueListenable: _fetchingSongs,
+                    builder: (_, value, __) {
+                      if (value == true) {
+                        return IconButton(
+                          icon: const SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: Spinner(),
+                          ),
+                          color: accent,
+                          onPressed: () {
+                            search();
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                        );
+                      } else {
+                        return IconButton(
+                          icon: Icon(
+                            Icons.search,
+                            color: accent,
+                          ),
+                          color: accent,
+                          onPressed: () {
+                            search();
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                        );
+                      }
+                    },
+                  ),
                   border: InputBorder.none,
                   hintText: '${AppLocalizations.of(context)!.search}...',
                   hintStyle: TextStyle(
@@ -138,7 +144,11 @@ class _SearchPageState extends State<SearchPage> {
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(
-                        top: 5, bottom: 5, left: 50, right: 50),
+                      top: 5,
+                      bottom: 5,
+                      left: 50,
+                      right: 50,
+                    ),
                     child: SongBar(
                       searchedList[index],
                       false,
@@ -156,7 +166,11 @@ class _SearchPageState extends State<SearchPage> {
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(
-                        top: 8, bottom: 6, left: 60, right: 60),
+                      top: 8,
+                      bottom: 6,
+                      left: 60,
+                      right: 60,
+                    ),
                     child: Card(
                       color: bgLight,
                       shape: RoundedRectangleBorder(

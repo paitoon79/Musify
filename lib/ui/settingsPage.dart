@@ -51,7 +51,7 @@ class SettingsCards extends StatelessWidget {
               backgroundColor: Colors.transparent,
               context: context,
               builder: (BuildContext context) {
-                final List<int> colors = [
+                final colors = <int>[
                   0xFFFFFFFF,
                   0xFFFFCDD2,
                   0xFFF8BBD0,
@@ -122,7 +122,9 @@ class SettingsCards extends StatelessWidget {
                                       colors[index],
                                     );
                                     MyApp.setAccentColor(
-                                        context, Color(colors[index]));
+                                      context,
+                                      Color(colors[index]),
+                                    );
 
                                     Navigator.pop(context);
                                   },
@@ -159,7 +161,7 @@ class SettingsCards extends StatelessWidget {
               backgroundColor: Colors.transparent,
               context: context,
               builder: (BuildContext context) {
-                final Map<String, String> codes = {
+                final codes = <String, String>{
                   'English': 'en',
                   'Georgian': 'ka',
                   'Chinese': 'zh',
@@ -174,7 +176,7 @@ class SettingsCards extends StatelessWidget {
                   'Ukrainian': 'uk',
                 };
 
-                final List<String> availableLanguages = [
+                final availableLanguages = <String>[
                   'English',
                   'Georgian',
                   'Chinese',

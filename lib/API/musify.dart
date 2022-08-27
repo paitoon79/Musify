@@ -59,7 +59,7 @@ Future get10Music(dynamic playlistid) async {
   final List playlistSongs =
       await getData('cache', 'playlist10Songs$playlistid') ?? [];
   if (playlistSongs.isEmpty) {
-    int index = 0;
+    var index = 0;
     await for (final song in yt.playlists.getVideos(playlistid).take(10)) {
       playlistSongs.add(
         returnSongLayout(
@@ -155,8 +155,10 @@ Future<List> searchPlaylist(String query) async {
   }
 
   return playlists
-      .where((playlist) =>
-          playlist['title'].toLowerCase().contains(query.toLowerCase()))
+      .where(
+        (playlist) =>
+            playlist['title'].toLowerCase().contains(query.toLowerCase()),
+      )
       .toList();
 }
 
@@ -195,7 +197,7 @@ Future getSongsFromPlaylist(dynamic playlistid) async {
   final List playlistSongs =
       await getData('cache', 'playlistSongs$playlistid') ?? [];
   if (playlistSongs.isEmpty) {
-    int index = 0;
+    var index = 0;
     await for (final song in yt.playlists.getVideos(playlistid)) {
       playlistSongs.add(
         returnSongLayout(
@@ -287,7 +289,7 @@ Future getSongDetails(dynamic songIndex, dynamic songId) async {
 }
 
 Future getSongLyrics(String artist, String title) async {
-  final String currentApiUrl =
+  final currentApiUrl =
       'https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}';
   if (_lastLyricsUrl != currentApiUrl) {
     if (await getData('cache', 'lyrics-$currentApiUrl') != null) {
@@ -304,8 +306,11 @@ Future getSongLyrics(String artist, String title) async {
         final lyricsResponse = await json.decode(response.body);
         if (lyricsResponse['lyrics'] != null) {
           lyrics.value = lyricsResponse['lyrics'].toString();
-          addOrUpdateData('cache', 'lyrics-$_lastLyricsUrl',
-              lyricsResponse['lyrics'].toString());
+          addOrUpdateData(
+            'cache',
+            'lyrics-$_lastLyricsUrl',
+            lyricsResponse['lyrics'].toString(),
+          );
         } else {
           lyrics.value = 'not found';
         }

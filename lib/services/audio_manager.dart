@@ -12,7 +12,8 @@ final buttonNotifier = ValueNotifier<MPlayerState>(MPlayerState.stopped);
 final shuffleNotifier = ValueNotifier<bool>(false);
 final repeatNotifier = ValueNotifier<bool>(false);
 final prefferedFileExtension = ValueNotifier<String>(
-    Hive.box('settings').get('audioFileType', defaultValue: 'mp3') as String);
+  Hive.box('settings').get('audioFileType', defaultValue: 'mp3') as String,
+);
 final playNextSongAutomatically = ValueNotifier<bool>(false);
 
 bool get hasNext => activePlaylist.isEmpty

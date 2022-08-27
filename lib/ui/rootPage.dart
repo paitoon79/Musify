@@ -53,52 +53,54 @@ class AppState extends State<Musify> {
       body: ValueListenableBuilder<int>(
         valueListenable: activeTab,
         builder: (_, value, __) {
-          return Row(children: <Widget>[
-            NavigationRail(
-              backgroundColor: bgLight,
-              selectedIconTheme: IconThemeData(
-                color: accent != const Color(0xFFFFFFFF)
-                    ? Colors.white
-                    : Colors.black,
+          return Row(
+            children: <Widget>[
+              NavigationRail(
+                backgroundColor: bgLight,
+                selectedIconTheme: IconThemeData(
+                  color: accent != const Color(0xFFFFFFFF)
+                      ? Colors.white
+                      : Colors.black,
+                ),
+                selectedLabelTextStyle: TextStyle(color: accent),
+                unselectedIconTheme: const IconThemeData(color: Colors.white),
+                unselectedLabelTextStyle: const TextStyle(color: Colors.white),
+                useIndicator: true,
+                indicatorColor: accent,
+                selectedIndex: value,
+                onDestinationSelected: (int index) {
+                  activeTab.value = index;
+                },
+                labelType: NavigationRailLabelType.all,
+                destinations: [
+                  NavigationRailDestination(
+                    icon: const Icon(MdiIcons.homeOutline),
+                    selectedIcon: const Icon(MdiIcons.home),
+                    label: Text(AppLocalizations.of(context)!.home),
+                  ),
+                  NavigationRailDestination(
+                    icon: const Icon(MdiIcons.magnifyMinusOutline),
+                    selectedIcon: const Icon(MdiIcons.magnifyMinus),
+                    label: Text(AppLocalizations.of(context)!.search),
+                  ),
+                  NavigationRailDestination(
+                    icon: const Icon(MdiIcons.bookOutline),
+                    selectedIcon: const Icon(MdiIcons.book),
+                    label: Text(AppLocalizations.of(context)!.playlists),
+                  ),
+                  NavigationRailDestination(
+                    icon: const Icon(MdiIcons.cogOutline),
+                    selectedIcon: const Icon(MdiIcons.cog),
+                    label: Text(AppLocalizations.of(context)!.settings),
+                  ),
+                ],
               ),
-              selectedLabelTextStyle: TextStyle(color: accent),
-              unselectedIconTheme: const IconThemeData(color: Colors.white),
-              unselectedLabelTextStyle: const TextStyle(color: Colors.white),
-              useIndicator: true,
-              indicatorColor: accent,
-              selectedIndex: value,
-              onDestinationSelected: (int index) {
-                activeTab.value = index;
-              },
-              labelType: NavigationRailLabelType.all,
-              destinations: [
-                NavigationRailDestination(
-                  icon: const Icon(MdiIcons.homeOutline),
-                  selectedIcon: const Icon(MdiIcons.home),
-                  label: Text(AppLocalizations.of(context)!.home),
-                ),
-                NavigationRailDestination(
-                  icon: const Icon(MdiIcons.magnifyMinusOutline),
-                  selectedIcon: const Icon(MdiIcons.magnifyMinus),
-                  label: Text(AppLocalizations.of(context)!.search),
-                ),
-                NavigationRailDestination(
-                  icon: const Icon(MdiIcons.bookOutline),
-                  selectedIcon: const Icon(MdiIcons.book),
-                  label: Text(AppLocalizations.of(context)!.playlists),
-                ),
-                NavigationRailDestination(
-                  icon: const Icon(MdiIcons.cogOutline),
-                  selectedIcon: const Icon(MdiIcons.cog),
-                  label: Text(AppLocalizations.of(context)!.settings),
-                ),
-              ],
-            ),
 
-            const VerticalDivider(thickness: 1, width: 1),
-            // This is the main content.
-            Expanded(child: pages[value]),
-          ]);
+              const VerticalDivider(thickness: 1, width: 1),
+              // This is the main content.
+              Expanded(child: pages[value]),
+            ],
+          );
         },
       ),
     );
@@ -328,17 +330,18 @@ class AppState extends State<Musify> {
                       onPressed: playNext,
                     ),
                     ValueListenableBuilder<bool>(
-                        valueListenable: repeatNotifier,
-                        builder: (_, value, __) {
-                          return IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              MdiIcons.repeat,
-                              color: value ? accent : Colors.white,
-                            ),
-                            onPressed: changeLoopStatus,
-                          );
-                        }),
+                      valueListenable: repeatNotifier,
+                      builder: (_, value, __) {
+                        return IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            MdiIcons.repeat,
+                            color: value ? accent : Colors.white,
+                          ),
+                          onPressed: changeLoopStatus,
+                        );
+                      },
+                    ),
                     ValueListenableBuilder<bool>(
                       valueListenable: playNextSongAutomatically,
                       builder: (_, value, __) {

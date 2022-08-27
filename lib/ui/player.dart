@@ -125,7 +125,9 @@ class AudioAppState extends State<AudioApp> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    top: size.height * 0.04, bottom: size.height * 0.01),
+                  top: size.height * 0.04,
+                  bottom: size.height * 0.01,
+                ),
                 child: Column(
                   children: <Widget>[
                     Text(
@@ -420,7 +422,8 @@ class AudioAppState extends State<AudioApp> {
                                           );
                                         } else if (value == 'null') {
                                           return const SizedBox(
-                                              child: Spinner());
+                                            child: Spinner(),
+                                          );
                                         } else {
                                           return Padding(
                                             padding: const EdgeInsets.only(
