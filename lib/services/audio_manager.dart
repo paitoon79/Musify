@@ -30,11 +30,11 @@ String get positionText =>
 
 bool isMuted = false;
 
-Future<void> play() => audioPlayer.play();
+void play() => audioPlayer.play();
 
-Future<void> pause() => audioPlayer.pause();
+void pause() => audioPlayer.pause();
 
-Future<void> stop() => audioPlayer.stop();
+void stop() => audioPlayer.stop();
 
 Future playNext() async {
   if (id + 1 <= activePlaylist.length) {
@@ -52,7 +52,7 @@ Future playPrevious() async {
 
 Future<void> playSong(Map song) async {
   await setSongDetails(song);
-  await play();
+  play();
 }
 
 Future changeShuffleStatus() async {
