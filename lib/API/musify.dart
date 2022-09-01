@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart' as http;
 import 'package:musify/helper/formatter.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/services/data_manager.dart';
+import 'package:musify/services/lyrics_service.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 final yt = YoutubeExplode();
@@ -30,7 +30,7 @@ dynamic activeSong;
 final ValueNotifier<bool> songLikeStatus = ValueNotifier<bool>(false);
 
 final lyrics = ValueNotifier<String>('null');
-String _lastLyricsUrl = '';
+String lastFetchedLyrics = 'null';
 
 int id = 0;
 
@@ -290,35 +290,13 @@ Future getSongDetails(dynamic songIndex, dynamic songId) async {
 }
 
 Future getSongLyrics(String artist, String title) async {
-  final currentApiUrl =
-      'https://api.lyrics.ovh/v1/$artist/${title.split(" (")[0].split("|")[0].trim()}';
-  if (_lastLyricsUrl != currentApiUrl) {
-    if (await getData('cache', 'lyrics-$currentApiUrl') != null) {
-      lyrics.value = await getData('cache', 'lyrics-$currentApiUrl');
-    } else {
-      lyrics.value = 'null';
-      _lastLyricsUrl = currentApiUrl;
-      final response = await http.get(
-        Uri.parse(_lastLyricsUrl),
-        headers: {'Accept': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        final lyricsResponse = await json.decode(response.body);
-        if (lyricsResponse['lyrics'] != null) {
-          lyrics.value = lyricsResponse['lyrics'].toString();
-          addOrUpdateData(
-            'cache',
-            'lyrics-$_lastLyricsUrl',
-            lyricsResponse['lyrics'].toString(),
-          );
-        } else {
-          lyrics.value = 'not found';
-        }
-      } else {
-        lyrics.value = 'not found';
-        throw Exception('Failed to load lyrics');
-      }
-    }
+  if (lastFetchedLyrics != '$artist - $title') {
+    lyrics.value = 'null';
+    final _lyrics = await Lyrics().getLyrics(artist: artist, track: title);
+    lyrics.value = _lyrics;
+    lastFetchedLyrics = '$artist - $title';
+    return _lyrics;
   }
+
+  return lyrics.value;
 }
