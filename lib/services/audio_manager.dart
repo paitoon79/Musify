@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musify/API/musify.dart';
-import 'package:musify/ui/player.dart';
+import 'package:musify/ui/rootPage.dart';
 
 AudioPlayer audioPlayer = AudioPlayer();
 
@@ -24,10 +24,10 @@ bool get hasPrevious =>
     activePlaylist.isEmpty ? audioPlayer.hasPrevious : id - 1 >= 0;
 
 String get durationText =>
-    duration != null ? duration.toString().split('.').first : '';
+    duration.value != null ? duration.value.toString().split('.').first : '';
 
 String get positionText =>
-    position != null ? position.toString().split('.').first : '';
+    position.value != null ? position.value.toString().split('.').first : '';
 
 bool isMuted = false;
 

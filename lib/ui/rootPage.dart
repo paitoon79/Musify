@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,10 +9,21 @@ import 'package:musify/API/musify.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/style/appColors.dart';
 import 'package:musify/ui/homePage.dart';
-import 'package:musify/ui/player.dart';
 import 'package:musify/ui/playlistsPage.dart';
 import 'package:musify/ui/searchPage.dart';
 import 'package:musify/ui/settingsPage.dart';
+
+StreamSubscription? positionSubscription;
+StreamSubscription? audioPlayerStateSubscription;
+
+ValueNotifier<Duration?> duration = ValueNotifier<Duration?>(Duration.zero);
+ValueNotifier<Duration?> position = ValueNotifier<Duration?>(Duration.zero);
+
+bool get isPlaying => buttonNotifier.value == MPlayerState.playing;
+
+bool get isPaused => buttonNotifier.value == MPlayerState.paused;
+
+enum MPlayerState { stopped, playing, paused, loading }
 
 class Musify extends StatefulWidget {
   @override
@@ -31,12 +44,11 @@ class AppState extends State<Musify> {
         await audioPlayer.seek(Duration.zero, index: 0);
       }
     });
-    positionSubscription = audioPlayer.positionStream
-        .listen((p) => {if (mounted) setState(() => position = p)});
+    positionSubscription = audioPlayer.positionStream.listen(
+      (p) => position.value = p,
+    );
     audioPlayer.durationStream.listen(
-      (d) => {
-        if (mounted) {setState(() => duration = d)}
-      },
+      (d) => duration.value = d,
     );
   }
 
@@ -210,46 +222,54 @@ class AppState extends State<Musify> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    if (position != null)
-                      Text(
-                        position != null
-                            ? '$positionText '.replaceFirst('0:0', '0')
-                            : duration != null
-                                ? durationText
-                                : '',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    if (duration != null)
-                      Slider(
-                        activeColor: accent,
-                        inactiveColor: Colors.green[50],
-                        value: position?.inMilliseconds.toDouble() ?? 0.0,
-                        onChanged: (double? value) {
-                          setState(() {
-                            audioPlayer.seek(
-                              Duration(
-                                seconds: (value! / 1000).round(),
+                ValueListenableBuilder<Duration?>(
+                  valueListenable: position,
+                  builder: (_, positionvalue, __) {
+                    return ValueListenableBuilder<Duration?>(
+                      valueListenable: duration,
+                      builder: (_, durationvalue, __) {
+                        return Row(
+                          children: [
+                            if (positionvalue != null)
+                              Text(
+                                '$positionText '.replaceFirst('0:0', '0'),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
                               ),
-                            );
-                            value = value;
-                          });
-                        },
-                        max: duration!.inMilliseconds.toDouble(),
-                      ),
-                    if (position != null)
-                      Text(
-                        position != null
-                            ? durationText.replaceAll('0:', '')
-                            : duration != null
-                                ? durationText
-                                : '',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.white),
-                      )
-                  ],
+                            if (durationvalue != null)
+                              Slider(
+                                activeColor: accent,
+                                inactiveColor: Colors.green[50],
+                                value:
+                                    positionvalue?.inMilliseconds.toDouble() ??
+                                        0.0,
+                                onChanged: (double? value) {
+                                  setState(() {
+                                    audioPlayer.seek(
+                                      Duration(
+                                        seconds: (value! / 1000).round(),
+                                      ),
+                                    );
+                                    value = value;
+                                  });
+                                },
+                                max: durationvalue.inMilliseconds.toDouble(),
+                              ),
+                            if (positionvalue != null)
+                              Text(
+                                durationText.replaceAll('0:', ''),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              )
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
                 Row(
                   children: [
