@@ -27,7 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  build_runner: ^2.2.0
+  build_runner: ^2.3.2
   cached_network_image: ^3.2.2
   flutter:
     sdk: flutter
@@ -37,12 +37,12 @@ dependencies:
   hive_flutter: ^1.1.0
   http: ^0.13.5
   intl: ^0.17.0 
-  just_audio: ^0.9.28
-  just_audio_mpv: ^0.1.4
+  just_audio: ^0.9.30
+  just_audio_mpv: ^0.1.6
   just_audio_windows: ^0.1.0
-  material_design_icons_flutter: ^5.0.6996
-  package_info_plus: ^1.4.3+1
-  youtube_explode_dart: ^1.12.0
+  material_design_icons_flutter: ^6.0.7096
+  package_info_plus: ^3.0.2
+  youtube_explode_dart: ^1.12.3
 
 dev_dependencies:
   flutter_test:
