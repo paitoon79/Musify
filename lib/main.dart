@@ -139,8 +139,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-late String version;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
