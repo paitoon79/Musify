@@ -6,7 +6,6 @@ import 'package:musify/helper/material_color_creator.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/style/appColors.dart';
 import 'package:musify/ui/rootPage.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -148,7 +147,5 @@ void main() async {
   await Hive.openBox('settings');
   await Hive.openBox('user');
   await Hive.openBox('cache');
-  final packageInfo = await PackageInfo.fromPlatform();
-  version = packageInfo.version;
   runApp(const MyApp());
 }
