@@ -87,23 +87,24 @@ class AppState extends State<Musify> {
                 labelType: NavigationRailLabelType.all,
                 destinations: [
                   NavigationRailDestination(
-                    icon: Icon(FluentIcons.home_24_regular),
-                    selectedIcon: Icon(FluentIcons.home_24_filled),
+                    icon: const Icon(FluentIcons.home_24_regular),
+                    selectedIcon: const Icon(FluentIcons.home_24_filled),
                     label: Text(AppLocalizations.of(context)!.home),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(FluentIcons.search_24_regular),
-                    selectedIcon: Icon(FluentIcons.search_24_filled),
+                    icon: const Icon(FluentIcons.search_24_regular),
+                    selectedIcon: const Icon(FluentIcons.search_24_filled),
                     label: Text(AppLocalizations.of(context)!.search),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(FluentIcons.book_24_regular),
-                    selectedIcon: Icon(FluentIcons.book_24_filled),
+                    icon: const Icon(FluentIcons.book_24_regular),
+                    selectedIcon: const Icon(FluentIcons.book_24_filled),
                     label: Text(AppLocalizations.of(context)!.playlists),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(FluentIcons.more_horizontal_24_regular),
-                    selectedIcon: Icon(FluentIcons.more_horizontal_24_filled),
+                    icon: const Icon(FluentIcons.more_horizontal_24_regular),
+                    selectedIcon:
+                        const Icon(FluentIcons.more_horizontal_24_filled),
                     label: Text(AppLocalizations.of(context)!.settings),
                   ),
                 ],
@@ -327,8 +328,8 @@ class AppState extends State<Musify> {
 
                         return IconButton(
                           icon: playing == true
-                              ? Icon(FluentIcons.pause_24_filled)
-                              : Icon(FluentIcons.play_24_filled),
+                              ? const Icon(FluentIcons.pause_24_filled)
+                              : const Icon(FluentIcons.play_24_filled),
                           color: accent,
                           splashColor: Colors.transparent,
                           onPressed: () {
