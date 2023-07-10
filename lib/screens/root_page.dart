@@ -23,7 +23,6 @@ class Musify extends StatefulWidget {
 }
 
 ValueNotifier<int> activeTabIndex = ValueNotifier<int>(0);
-ValueNotifier<String> activeTab = ValueNotifier<String>(RoutePaths.home);
 final _navigatorKey = GlobalKey<NavigatorState>();
 
 class _MusifyState extends State<Musify> {
@@ -227,12 +226,7 @@ class _MusifyState extends State<Musify> {
           context.l10n()!.more,
         ][index];
 
-        final routeName = [
-          RoutePaths.home,
-          RoutePaths.search,
-          RoutePaths.userPlaylists,
-          RoutePaths.more,
-        ][index];
+        final routeName = destinations[index];
 
         return BottomNavBarItem(
           icon: Icon(iconData),
@@ -294,8 +288,8 @@ class _MusifyState extends State<Musify> {
             onItemSelected: (index) => setState(() {
               activeTabIndex.value = index;
               _navigatorKey.currentState!.pushNamedAndRemoveUntil(
-                activeTab.value,
-                ModalRoute.withName(activeTab.value),
+                destinations[index],
+                ModalRoute.withName(destinations[index]),
               );
             }),
             items: items,
@@ -323,10 +317,9 @@ class _MusifyState extends State<Musify> {
                         selectedIndex: activeTabIndex.value,
                         onDestinationSelected: (int index) {
                           activeTabIndex.value = index;
-                          activeTab.value = destinations[index];
                           _navigatorKey.currentState!.pushNamedAndRemoveUntil(
-                            activeTab.value,
-                            ModalRoute.withName(activeTab.value),
+                            destinations[index],
+                            ModalRoute.withName(destinations[index]),
                           );
                         },
                         labelType: NavigationRailLabelType.all,
