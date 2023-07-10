@@ -377,6 +377,7 @@ class _MusifyState extends State<Musify> {
             ),
           ],
         ),
+        bottomNavigationBar: getMiniPlayer(),
       );
     }
   }
