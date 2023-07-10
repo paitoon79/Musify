@@ -41,63 +41,10 @@ class _MusifyState extends State<Musify> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: WillPopScope(
-        onWillPop: () async {
-          if (_navigatorKey.currentState?.canPop() == true) {
-            _navigatorKey.currentState?.pop();
-            return false;
-          }
-          return true;
-        },
-        child: Navigator(
-          key: _navigatorKey,
-          initialRoute: RoutePaths.home,
-          onGenerateRoute: RouterService.generateRoute,
-        ),
-      ),
-      bottomNavigationBar: getFooter(),
-    );
+    return getBody();
   }
 
-  Widget getFooter() {
-    final items = List.generate(
-      4,
-      (index) {
-        final iconData = [
-          FluentIcons.home_24_regular,
-          FluentIcons.search_24_regular,
-          FluentIcons.book_24_regular,
-          FluentIcons.more_horizontal_24_regular,
-        ][index];
-
-        final title = [
-          context.l10n()!.home,
-          context.l10n()!.search,
-          context.l10n()!.userPlaylists,
-          context.l10n()!.more,
-        ][index];
-
-        final routeName = [
-          RoutePaths.home,
-          RoutePaths.search,
-          RoutePaths.userPlaylists,
-          RoutePaths.more,
-        ][index];
-
-        return BottomNavBarItem(
-          icon: Icon(iconData),
-          title: Text(
-            title,
-            maxLines: 1,
-          ),
-          routeName: routeName,
-          activeColor: colorScheme.primary,
-          inactiveColor: Theme.of(context).hintColor,
-        );
-      },
-    );
-
+  Widget getMiniPlayer() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -257,10 +204,50 @@ class _MusifyState extends State<Musify> {
               ),
             );
           },
-        ),
-        _buildBottomBar(context, items),
+        )
       ],
     );
+  }
+
+  Widget getBody() {
+    final items = List.generate(
+      4,
+      (index) {
+        final iconData = [
+          FluentIcons.home_24_regular,
+          FluentIcons.search_24_regular,
+          FluentIcons.book_24_regular,
+          FluentIcons.more_horizontal_24_regular,
+        ][index];
+
+        final title = [
+          context.l10n()!.home,
+          context.l10n()!.search,
+          context.l10n()!.userPlaylists,
+          context.l10n()!.more,
+        ][index];
+
+        final routeName = [
+          RoutePaths.home,
+          RoutePaths.search,
+          RoutePaths.userPlaylists,
+          RoutePaths.more,
+        ][index];
+
+        return BottomNavBarItem(
+          icon: Icon(iconData),
+          title: Text(
+            title,
+            maxLines: 1,
+          ),
+          routeName: routeName,
+          activeColor: colorScheme.primary,
+          inactiveColor: Theme.of(context).hintColor,
+        );
+      },
+    );
+
+    return _getHomeContent(context, items);
   }
 
   Widget _buildNullArtworkWidget() => ClipRRect(
@@ -281,22 +268,123 @@ class _MusifyState extends State<Musify> {
         ),
       );
 
-  Widget _buildBottomBar(BuildContext context, List<BottomNavBarItem> items) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 100),
-      height: 65,
-      child: CustomAnimatedBottomBar(
-        backgroundColor: Theme.of(context).bottomAppBarTheme.color,
-        selectedIndex: activeTabIndex.value,
-        onItemSelected: (index) => setState(() {
-          activeTabIndex.value = index;
-          _navigatorKey.currentState!.pushNamedAndRemoveUntil(
-            activeTab.value,
-            ModalRoute.withName(activeTab.value),
-          );
-        }),
-        items: items,
-      ),
-    );
+  Widget _getHomeContent(BuildContext context, List<BottomNavBarItem> items) {
+    if (Platform.isAndroid) {
+      return Scaffold(
+        body: WillPopScope(
+          onWillPop: () async {
+            if (_navigatorKey.currentState?.canPop() == true) {
+              _navigatorKey.currentState?.pop();
+              return false;
+            }
+            return true;
+          },
+          child: Navigator(
+            key: _navigatorKey,
+            initialRoute: RoutePaths.home,
+            onGenerateRoute: RouterService.generateRoute,
+          ),
+        ),
+        bottomNavigationBar: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          height: 65,
+          child: CustomAnimatedBottomBar(
+            backgroundColor: Theme.of(context).bottomAppBarTheme.color,
+            selectedIndex: activeTabIndex.value,
+            onItemSelected: (index) => setState(() {
+              activeTabIndex.value = index;
+              _navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                activeTab.value,
+                ModalRoute.withName(activeTab.value),
+              );
+            }),
+            items: items,
+          ),
+        ),
+      );
+    } else {
+      return Scaffold(
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ValueListenableBuilder<int>(
+                    valueListenable: activeTabIndex,
+                    builder: (_, value, __) {
+                      return NavigationRail(
+                        unselectedIconTheme:
+                            const IconThemeData(color: Colors.white),
+                        unselectedLabelTextStyle:
+                            const TextStyle(color: Colors.white),
+                        useIndicator: true,
+                        selectedIndex: activeTabIndex.value,
+                        onDestinationSelected: (int index) {
+                          activeTabIndex.value = index;
+                          activeTab.value = destinations[index];
+                          _navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                            activeTab.value,
+                            ModalRoute.withName(activeTab.value),
+                          );
+                        },
+                        labelType: NavigationRailLabelType.all,
+                        destinations: [
+                          NavigationRailDestination(
+                            icon: const Icon(FluentIcons.home_24_regular),
+                            selectedIcon:
+                                const Icon(FluentIcons.home_24_filled),
+                            label: Text(context.l10n()!.home),
+                          ),
+                          NavigationRailDestination(
+                            icon: const Icon(FluentIcons.search_24_regular),
+                            selectedIcon:
+                                const Icon(FluentIcons.search_24_filled),
+                            label: Text(context.l10n()!.search),
+                          ),
+                          NavigationRailDestination(
+                            icon: const Icon(FluentIcons.book_24_regular),
+                            selectedIcon:
+                                const Icon(FluentIcons.book_24_filled),
+                            label: Text(context.l10n()!.playlists),
+                          ),
+                          NavigationRailDestination(
+                            icon: const Icon(
+                              FluentIcons.more_horizontal_24_regular,
+                            ),
+                            selectedIcon: const Icon(
+                              FluentIcons.more_horizontal_24_filled,
+                            ),
+                            label: Text(context.l10n()!.settings),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(
+                    child: WillPopScope(
+                      onWillPop: () async {
+                        if (_navigatorKey.currentState?.canPop() == true) {
+                          _navigatorKey.currentState?.pop();
+                          return false;
+                        }
+                        return true;
+                      },
+                      child: Navigator(
+                        key: _navigatorKey,
+                        initialRoute: RoutePaths.home,
+                        onGenerateRoute: RouterService.generateRoute,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
