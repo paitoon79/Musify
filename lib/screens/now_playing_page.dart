@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -277,26 +279,28 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                             if (metadata.extras['ytid'].toString().isNotEmpty)
                               Column(
                                 children: [
-                                  IconButton(
-                                    color: Theme.of(context).hintColor,
-                                    icon: const Icon(
-                                      FluentIcons.arrow_download_24_regular,
+                                  if (Platform.isAndroid)
+                                    IconButton(
+                                      color: Theme.of(context).hintColor,
+                                      icon: const Icon(
+                                        FluentIcons.arrow_download_24_regular,
+                                      ),
+                                      onPressed: () =>
+                                          prefferedDownloadMode.value ==
+                                                  'normal'
+                                              ? downloadSong(
+                                                  context,
+                                                  mediaItemToMap(
+                                                    metadata as MediaItem,
+                                                  ),
+                                                )
+                                              : downloadSongFaster(
+                                                  context,
+                                                  mediaItemToMap(
+                                                    metadata as MediaItem,
+                                                  ),
+                                                ),
                                     ),
-                                    onPressed: () =>
-                                        prefferedDownloadMode.value == 'normal'
-                                            ? downloadSong(
-                                                context,
-                                                mediaItemToMap(
-                                                  metadata as MediaItem,
-                                                ),
-                                              )
-                                            : downloadSongFaster(
-                                                context,
-                                                mediaItemToMap(
-                                                  metadata as MediaItem,
-                                                ),
-                                              ),
-                                  ),
                                   ValueListenableBuilder<bool>(
                                     valueListenable: muteNotifier,
                                     builder: (_, value, __) {

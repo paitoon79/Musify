@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -120,13 +122,14 @@ class SongBar extends StatelessWidget {
                     );
                   },
                 ),
-                IconButton(
-                  color: colorScheme.primary,
-                  icon: const Icon(FluentIcons.arrow_download_24_regular),
-                  onPressed: () => prefferedDownloadMode.value == 'normal'
-                      ? downloadSong(context, song)
-                      : downloadSongFaster(context, song),
-                ),
+                if (Platform.isAndroid)
+                  IconButton(
+                    color: colorScheme.primary,
+                    icon: const Icon(FluentIcons.arrow_download_24_regular),
+                    onPressed: () => prefferedDownloadMode.value == 'normal'
+                        ? downloadSong(context, song)
+                        : downloadSongFaster(context, song),
+                  ),
               ],
             ),
           ],

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:musify/extensions/l10n.dart';
@@ -98,17 +100,17 @@ class SettingsCards extends StatelessWidget {
             ),
           },
         ),
-
-        SettingBar(
-          context.l10n()!.localMusic,
-          FluentIcons.arrow_download_24_filled,
-          () => {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LocalMusicPage()),
-            ),
-          },
-        ),
+        if (Platform.isAndroid)
+          SettingBar(
+            context.l10n()!.localMusic,
+            FluentIcons.arrow_download_24_filled,
+            () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LocalMusicPage()),
+              ),
+            },
+          ),
 
         // CATEGORY: SETTINGS
         Text(
@@ -369,164 +371,168 @@ class SettingsCards extends StatelessWidget {
             );
           },
         ),
+        if (Platform.isAndroid)
+          ValueListenableBuilder<bool>(
+            valueListenable: foregroundService,
+            builder: (_, foregroundValue, __) {
+              return SettingSwitchBar(
+                context.l10n()!.foregroundService,
+                FluentIcons.eye_24_filled,
+                foregroundValue,
+                (value) {
+                  addOrUpdateData(
+                    'settings',
+                    'foregroundService',
+                    value,
+                  );
 
-        ValueListenableBuilder<bool>(
-          valueListenable: foregroundService,
-          builder: (_, foregroundValue, __) {
-            return SettingSwitchBar(
-              context.l10n()!.foregroundService,
-              FluentIcons.eye_24_filled,
-              foregroundValue,
-              (value) {
-                addOrUpdateData(
-                  'settings',
-                  'foregroundService',
-                  value,
-                );
+                  foregroundService.value = value;
 
-                foregroundService.value = value;
-
-                showToast(
-                  context,
-                  context.l10n()!.settingChangedAndRestartMsg,
-                );
-              },
-            );
-          },
-        ),
-        SettingBar(
-          context.l10n()!.audioFileType,
-          FluentIcons.multiselect_ltr_24_filled,
-          () => {
-            showModalBottomSheet(
-              isDismissible: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (BuildContext context) {
-                final availableFileTypes = ['mp3', 'flac', 'm4a'];
-                return Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.primary,
+                  showToast(
+                    context,
+                    context.l10n()!.settingChangedAndRestartMsg,
+                  );
+                },
+              );
+            },
+          ),
+        if (Platform.isAndroid)
+          SettingBar(
+            context.l10n()!.audioFileType,
+            FluentIcons.multiselect_ltr_24_filled,
+            () => {
+              showModalBottomSheet(
+                isDismissible: true,
+                backgroundColor: Colors.transparent,
+                context: context,
+                builder: (BuildContext context) {
+                  final availableFileTypes = ['mp3', 'flac', 'm4a'];
+                  return Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: colorScheme.primary,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
                       ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
+                      width:
+                          MediaQuery.of(context).copyWith().size.width * 0.90,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: availableFileTypes.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Card(
+                              child: ListTile(
+                                title: Text(
+                                  availableFileTypes[index],
+                                ),
+                                onTap: () {
+                                  addOrUpdateData(
+                                    'settings',
+                                    'audioFileType',
+                                    availableFileTypes[index],
+                                  );
+                                  prefferedFileExtension.value =
+                                      availableFileTypes[index];
+                                  showToast(
+                                    context,
+                                    context.l10n()!.audioFileTypeMsg,
+                                  );
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    width: MediaQuery.of(context).copyWith().size.width * 0.90,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: availableFileTypes.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Card(
-                            child: ListTile(
-                              title: Text(
-                                availableFileTypes[index],
+                  );
+                },
+              ),
+            },
+          ),
+        if (Platform.isAndroid)
+          SettingBar(
+            context.l10n()!.downloadMode,
+            FluentIcons.clock_arrow_download_24_filled,
+            () {
+              showModalBottomSheet(
+                isDismissible: true,
+                backgroundColor: Colors.transparent,
+                context: context,
+                builder: (BuildContext context) {
+                  final availableModes = ['normal', 'faster'];
+                  return Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: colorScheme.primary,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      width:
+                          MediaQuery.of(context).copyWith().size.width * 0.90,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(25),
+                            child: Text(
+                              context.l10n()!.fasterDownloadMsg,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: colorScheme.primary,
                               ),
-                              onTap: () {
-                                addOrUpdateData(
-                                  'settings',
-                                  'audioFileType',
-                                  availableFileTypes[index],
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: availableModes.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Card(
+                                    child: ListTile(
+                                      title: Text(
+                                        availableModes[index],
+                                      ),
+                                      onTap: () {
+                                        addOrUpdateData(
+                                          'settings',
+                                          'downloadMode',
+                                          availableModes[index],
+                                        );
+                                        prefferedDownloadMode.value =
+                                            availableModes[index];
+                                        showToast(
+                                          context,
+                                          context.l10n()!.downloadModeMsg,
+                                        );
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
                                 );
-                                prefferedFileExtension.value =
-                                    availableFileTypes[index];
-                                showToast(
-                                  context,
-                                  context.l10n()!.audioFileTypeMsg,
-                                );
-                                Navigator.pop(context);
                               },
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
-          },
-        ),
-        SettingBar(
-          context.l10n()!.downloadMode,
-          FluentIcons.clock_arrow_download_24_filled,
-          () {
-            showModalBottomSheet(
-              isDismissible: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (BuildContext context) {
-                final availableModes = ['normal', 'faster'];
-                return Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.primary,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
+                        ],
                       ),
                     ),
-                    width: MediaQuery.of(context).copyWith().size.width * 0.90,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: Text(
-                            context.l10n()!.fasterDownloadMsg,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: availableModes.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Card(
-                                  child: ListTile(
-                                    title: Text(
-                                      availableModes[index],
-                                    ),
-                                    onTap: () {
-                                      addOrUpdateData(
-                                        'settings',
-                                        'downloadMode',
-                                        availableModes[index],
-                                      );
-                                      prefferedDownloadMode.value =
-                                          availableModes[index];
-                                      showToast(
-                                        context,
-                                        context.l10n()!.downloadModeMsg,
-                                      );
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+                  );
+                },
+              );
+            },
+          ),
 
         // CATEGORY: TOOLS
         Text(
@@ -575,7 +581,7 @@ class SettingsCards extends StatelessWidget {
             ),
           },
         ),
-        if (!isFdroidBuild)
+        if (Platform.isAndroid && !isFdroidBuild)
           SettingBar(
             context.l10n()!.downloadAppUpdate,
             FluentIcons.arrow_download_24_filled,
