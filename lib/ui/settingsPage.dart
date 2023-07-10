@@ -1,6 +1,7 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:musify/customWidgets/setting_bar.dart';
 import 'package:musify/main.dart';
 import 'package:musify/services/audio_manager.dart';
@@ -44,7 +45,7 @@ class SettingsCards extends StatelessWidget {
       children: <Widget>[
         SettingBar(
           AppLocalizations.of(context)!.accentColor,
-          MdiIcons.shapeOutline,
+          FluentIcons.color_24_filled,
           () => {
             showModalBottomSheet(
               isDismissible: true,
@@ -154,7 +155,7 @@ class SettingsCards extends StatelessWidget {
         ),
         SettingBar(
           AppLocalizations.of(context)!.language,
-          MdiIcons.translate,
+          FluentIcons.translate_24_filled,
           () => {
             showModalBottomSheet(
               isDismissible: true,
@@ -250,14 +251,14 @@ class SettingsCards extends StatelessWidget {
         ),
         SettingBar(
           AppLocalizations.of(context)!.clearCache,
-          MdiIcons.broom,
+          FluentIcons.broom_24_filled,
           () => {
             clearCache(),
           },
         ),
         SettingBar(
           AppLocalizations.of(context)!.clearSearchHistory,
-          MdiIcons.history,
+          FluentIcons.history_24_filled,
           () => {
             searchHistory = [],
             deleteData('user', 'searchHistory'),
@@ -265,7 +266,7 @@ class SettingsCards extends StatelessWidget {
         ),
         SettingBar(
           AppLocalizations.of(context)!.userPlaylists,
-          MdiIcons.account,
+          FluentIcons.list_24_filled,
           () => {
             Navigator.push(
               context,
@@ -277,7 +278,7 @@ class SettingsCards extends StatelessWidget {
         ),
         SettingBar(
           AppLocalizations.of(context)!.userLikedSongs,
-          MdiIcons.star,
+          FluentIcons.star_24_filled,
           () => {
             Navigator.push(
               context,
@@ -287,17 +288,17 @@ class SettingsCards extends StatelessWidget {
         ),
         SettingBar(
           AppLocalizations.of(context)!.backupUserData,
-          MdiIcons.cloudUpload,
+          FluentIcons.cloud_sync_24_filled,
           () => {backupData()},
         ),
         SettingBar(
           AppLocalizations.of(context)!.restoreUserData,
-          MdiIcons.cloudDownload,
+          FluentIcons.cloud_add_24_filled,
           () => {restoreData()},
         ),
         SettingBar(
           AppLocalizations.of(context)!.audioFileType,
-          MdiIcons.file,
+          FluentIcons.multiselect_ltr_24_filled,
           () => {
             showModalBottomSheet(
               isDismissible: true,
@@ -359,7 +360,7 @@ class SettingsCards extends StatelessWidget {
         ),
         SettingBar(
           AppLocalizations.of(context)!.about,
-          MdiIcons.information,
+          FluentIcons.book_information_24_filled,
           () => {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const AboutPage()),

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:musify/API/musify.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/style/appColors.dart';
@@ -86,23 +87,23 @@ class AppState extends State<Musify> {
                 labelType: NavigationRailLabelType.all,
                 destinations: [
                   NavigationRailDestination(
-                    icon: Icon(MdiIcons.homeOutline),
-                    selectedIcon: Icon(MdiIcons.home),
+                    icon: Icon(FluentIcons.home_24_regular),
+                    selectedIcon: Icon(FluentIcons.home_24_filled),
                     label: Text(AppLocalizations.of(context)!.home),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(MdiIcons.magnifyMinusOutline),
-                    selectedIcon: Icon(MdiIcons.magnifyMinus),
+                    icon: Icon(FluentIcons.search_24_regular),
+                    selectedIcon: Icon(FluentIcons.search_24_filled),
                     label: Text(AppLocalizations.of(context)!.search),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(MdiIcons.bookOutline),
-                    selectedIcon: Icon(MdiIcons.book),
+                    icon: Icon(FluentIcons.book_24_regular),
+                    selectedIcon: Icon(FluentIcons.book_24_filled),
                     label: Text(AppLocalizations.of(context)!.playlists),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(MdiIcons.cogOutline),
-                    selectedIcon: Icon(MdiIcons.cog),
+                    icon: Icon(FluentIcons.more_horizontal_24_regular),
+                    selectedIcon: Icon(FluentIcons.more_horizontal_24_filled),
                     label: Text(AppLocalizations.of(context)!.settings),
                   ),
                 ],
@@ -170,7 +171,7 @@ class AppState extends State<Musify> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Icon(
-                                      MdiIcons.musicNoteOutline,
+                                      FluentIcons.music_note_1_24_regular,
                                       size: 30,
                                       color: accent,
                                     ),
@@ -279,7 +280,7 @@ class AppState extends State<Musify> {
                         if (value == true) {
                           return IconButton(
                             color: accent,
-                            icon: Icon(MdiIcons.star),
+                            icon: const Icon(FluentIcons.star_24_filled),
                             onPressed: () => {
                               removeUserLikedSong(ytid),
                               songLikeStatus.value = false
@@ -288,7 +289,7 @@ class AppState extends State<Musify> {
                         } else {
                           return IconButton(
                             color: Colors.white,
-                            icon: Icon(MdiIcons.starOutline),
+                            icon: const Icon(FluentIcons.star_24_regular),
                             onPressed: () => {
                               addUserLikedSong(ytid),
                               songLikeStatus.value = true
@@ -303,7 +304,7 @@ class AppState extends State<Musify> {
                         return IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            MdiIcons.shuffle,
+                            FluentIcons.arrow_shuffle_24_filled,
                             color: value ? accent : Colors.white,
                           ),
                           onPressed: changeShuffleStatus,
@@ -326,8 +327,8 @@ class AppState extends State<Musify> {
 
                         return IconButton(
                           icon: playing == true
-                              ? Icon(MdiIcons.pause)
-                              : Icon(MdiIcons.playOutline),
+                              ? Icon(FluentIcons.pause_24_filled)
+                              : Icon(FluentIcons.play_24_filled),
                           color: accent,
                           splashColor: Colors.transparent,
                           onPressed: () {
@@ -355,7 +356,7 @@ class AppState extends State<Musify> {
                         return IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            MdiIcons.repeat,
+                            FluentIcons.arrow_repeat_1_24_filled,
                             color: value ? accent : Colors.white,
                           ),
                           onPressed: changeLoopStatus,
@@ -368,7 +369,7 @@ class AppState extends State<Musify> {
                         return IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(
-                            MdiIcons.chevronRight,
+                            FluentIcons.play_circle_hint_24_filled,
                             color: value ? accent : Colors.white,
                           ),
                           onPressed: changeAutoPlayNextStatus,
