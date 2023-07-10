@@ -59,7 +59,7 @@ class SongBar extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 15),
                     child: Text(
                       overflow: TextOverflow.ellipsis,
-                      (song['title'])
+                      song['title']
                           .toString()
                           .split('(')[0]
                           .replaceAll('&quot;', '"')
@@ -98,7 +98,7 @@ class SongBar extends StatelessWidget {
                     if (value == true) {
                       return IconButton(
                         color: accent,
-                        icon: const Icon(MdiIcons.star),
+                        icon: Icon(MdiIcons.star),
                         onPressed: () => {
                           removeUserLikedSong(song['ytid']),
                           songLikeStatus.value = false
@@ -107,7 +107,7 @@ class SongBar extends StatelessWidget {
                     } else {
                       return IconButton(
                         color: accent,
-                        icon: const Icon(MdiIcons.starOutline),
+                        icon: Icon(MdiIcons.starOutline),
                         onPressed: () => {
                           addUserLikedSong(song['ytid']),
                           songLikeStatus.value = true

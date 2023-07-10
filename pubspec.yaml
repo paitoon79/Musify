@@ -41,7 +41,7 @@ dependencies:
   just_audio: ^0.9.33
   just_audio_mpv: ^0.1.6
   just_audio_windows: ^0.2.0
-  material_design_icons_flutter: ^6.0.7096
+  material_design_icons_flutter: ^7.0.7296
   youtube_explode_dart: ^1.12.4
 
 dev_dependencies:

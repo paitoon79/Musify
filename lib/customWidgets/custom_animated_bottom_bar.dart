@@ -34,7 +34,8 @@ class CustomAnimatedBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? Theme.of(context).bottomAppBarColor;
+    final bgColor =
+        backgroundColor ?? Theme.of(context).bottomAppBarTheme.color;
 
     return DecoratedBox(
       decoration: BoxDecoration(

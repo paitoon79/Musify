@@ -86,23 +86,23 @@ class AppState extends State<Musify> {
                 labelType: NavigationRailLabelType.all,
                 destinations: [
                   NavigationRailDestination(
-                    icon: const Icon(MdiIcons.homeOutline),
-                    selectedIcon: const Icon(MdiIcons.home),
+                    icon: Icon(MdiIcons.homeOutline),
+                    selectedIcon: Icon(MdiIcons.home),
                     label: Text(AppLocalizations.of(context)!.home),
                   ),
                   NavigationRailDestination(
-                    icon: const Icon(MdiIcons.magnifyMinusOutline),
-                    selectedIcon: const Icon(MdiIcons.magnifyMinus),
+                    icon: Icon(MdiIcons.magnifyMinusOutline),
+                    selectedIcon: Icon(MdiIcons.magnifyMinus),
                     label: Text(AppLocalizations.of(context)!.search),
                   ),
                   NavigationRailDestination(
-                    icon: const Icon(MdiIcons.bookOutline),
-                    selectedIcon: const Icon(MdiIcons.book),
+                    icon: Icon(MdiIcons.bookOutline),
+                    selectedIcon: Icon(MdiIcons.book),
                     label: Text(AppLocalizations.of(context)!.playlists),
                   ),
                   NavigationRailDestination(
-                    icon: const Icon(MdiIcons.cogOutline),
-                    selectedIcon: const Icon(MdiIcons.cog),
+                    icon: Icon(MdiIcons.cogOutline),
+                    selectedIcon: Icon(MdiIcons.cog),
                     label: Text(AppLocalizations.of(context)!.settings),
                   ),
                 ],
@@ -279,7 +279,7 @@ class AppState extends State<Musify> {
                         if (value == true) {
                           return IconButton(
                             color: accent,
-                            icon: const Icon(MdiIcons.star),
+                            icon: Icon(MdiIcons.star),
                             onPressed: () => {
                               removeUserLikedSong(ytid),
                               songLikeStatus.value = false
@@ -288,7 +288,7 @@ class AppState extends State<Musify> {
                         } else {
                           return IconButton(
                             color: Colors.white,
-                            icon: const Icon(MdiIcons.starOutline),
+                            icon: Icon(MdiIcons.starOutline),
                             onPressed: () => {
                               addUserLikedSong(ytid),
                               songLikeStatus.value = true
@@ -326,8 +326,8 @@ class AppState extends State<Musify> {
 
                         return IconButton(
                           icon: playing == true
-                              ? const Icon(MdiIcons.pause)
-                              : const Icon(MdiIcons.playOutline),
+                              ? Icon(MdiIcons.pause)
+                              : Icon(MdiIcons.playOutline),
                           color: accent,
                           splashColor: Colors.transparent,
                           onPressed: () {
