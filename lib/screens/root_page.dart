@@ -344,7 +344,7 @@ class _MusifyState extends State<Musify> {
                             icon: const Icon(FluentIcons.book_24_regular),
                             selectedIcon:
                                 const Icon(FluentIcons.book_24_filled),
-                            label: Text(context.l10n()!.playlists),
+                            label: Text(context.l10n()!.userPlaylists),
                           ),
                           NavigationRailDestination(
                             icon: const Icon(
