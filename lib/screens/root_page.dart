@@ -279,21 +279,27 @@ class _MusifyState extends State<Musify> {
             onGenerateRoute: RouterService.generateRoute,
           ),
         ),
-        bottomNavigationBar: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          height: 65,
-          child: CustomAnimatedBottomBar(
-            backgroundColor: Theme.of(context).bottomAppBarTheme.color,
-            selectedIndex: activeTabIndex.value,
-            onItemSelected: (index) => setState(() {
-              activeTabIndex.value = index;
-              _navigatorKey.currentState!.pushNamedAndRemoveUntil(
-                destinations[index],
-                ModalRoute.withName(destinations[index]),
-              );
-            }),
-            items: items,
-          ),
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            getMiniPlayer(),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              height: 65,
+              child: CustomAnimatedBottomBar(
+                backgroundColor: Theme.of(context).bottomAppBarTheme.color,
+                selectedIndex: activeTabIndex.value,
+                onItemSelected: (index) => setState(() {
+                  activeTabIndex.value = index;
+                  _navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                    destinations[index],
+                    ModalRoute.withName(destinations[index]),
+                  );
+                }),
+                items: items,
+              ),
+            ),
+          ],
         ),
       );
     } else {
