@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -120,28 +121,30 @@ class _MyAppState extends State<MyApp> {
       themeMode = getThemeMode(themeModeSetting);
     }
 
-    ReceiveSharingIntent.getTextStream().listen(
-      (String? value) async {
-        if (value == null) return;
+    if (Platform.isAndroid) {
+      ReceiveSharingIntent.getTextStream().listen(
+        (String? value) async {
+          if (value == null) return;
 
-        final regex = RegExp(r'(youtube\.com|youtu\.be)');
-        if (!regex.hasMatch(value)) return;
+          final regex = RegExp(r'(youtube\.com|youtu\.be)');
+          if (!regex.hasMatch(value)) return;
 
-        final songId = getSongId(value);
-        if (songId == null) return;
+          final songId = getSongId(value);
+          if (songId == null) return;
 
-        try {
-          final song = await getSongDetails(0, songId);
+          try {
+            final song = await getSongDetails(0, songId);
 
-          await playSong(song);
-        } catch (e) {
-          debugPrint('Error: $e');
-        }
-      },
-      onError: (err) {
-        debugPrint('getLinkStream error: $err');
-      },
-    );
+            await playSong(song);
+          } catch (e) {
+            debugPrint('Error: $e');
+          }
+        },
+        onError: (err) {
+          debugPrint('getLinkStream error: $err');
+        },
+      );
+    }
   }
 
   @override
@@ -225,47 +228,50 @@ Future<void> initialisation() async {
   await Hive.openBox('user');
   await Hive.openBox('cache');
 
-  await FlutterDisplayMode.setHighRefreshRate();
+  if (Platform.isAndroid) {
+    await FlutterDisplayMode.setHighRefreshRate();
 
-  audioHandler = await AudioService.init(
-    builder: MyAudioHandler.new,
-    config: AudioServiceConfig(
-      androidNotificationChannelId: 'com.gokadzev.musify',
-      androidNotificationChannelName: 'Musify',
-      androidNotificationIcon: 'mipmap/launcher_icon',
-      androidShowNotificationBadge: true,
-      androidStopForegroundOnPause: !foregroundService.value,
-    ),
-  );
+    audioHandler = await AudioService.init(
+      builder: MyAudioHandler.new,
+      config: AudioServiceConfig(
+        androidNotificationChannelId: 'com.gokadzev.musify',
+        androidNotificationChannelName: 'Musify',
+        androidNotificationIcon: 'mipmap/launcher_icon',
+        androidShowNotificationBadge: true,
+        androidStopForegroundOnPause: !foregroundService.value,
+      ),
+    );
 
-  final session = await AudioSession.instance;
-  await session.configure(const AudioSessionConfiguration.music());
-  session.interruptionEventStream.listen((event) {
-    if (event.begin) {
-      if (audioPlayer.playing) {
-        audioHandler.pause();
-        _interrupted = true;
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+    session.interruptionEventStream.listen((event) {
+      if (event.begin) {
+        if (audioPlayer.playing) {
+          audioHandler.pause();
+          _interrupted = true;
+        }
+      } else {
+        switch (event.type) {
+          case AudioInterruptionType.pause:
+          case AudioInterruptionType.duck:
+            if (!audioPlayer.playing && _interrupted) {
+              audioHandler.play();
+            }
+            break;
+          case AudioInterruptionType.unknown:
+            break;
+        }
+        _interrupted = false;
       }
-    } else {
-      switch (event.type) {
-        case AudioInterruptionType.pause:
-        case AudioInterruptionType.duck:
-          if (!audioPlayer.playing && _interrupted) {
-            audioHandler.play();
-          }
-          break;
-        case AudioInterruptionType.unknown:
-          break;
-      }
-      _interrupted = false;
-    }
-  });
+    });
+
+    await enableBooster();
+
+    FileDownloader().configureNotification(
+      running: const TaskNotification('Downloading', 'file: {filename}'),
+      complete: const TaskNotification('Download finished', 'file: {filename}'),
+      progressBar: true,
+    );
+  }
   activateListeners();
-  await enableBooster();
-
-  FileDownloader().configureNotification(
-    running: const TaskNotification('Downloading', 'file: {filename}'),
-    complete: const TaskNotification('Download finished', 'file: {filename}'),
-    progressBar: true,
-  );
 }

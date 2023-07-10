@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -29,11 +30,13 @@ class _MusifyState extends State<Musify> {
   @override
   void initState() {
     super.initState();
-    if (!isFdroidBuild) {
-      unawaited(checkAppUpdates(context));
-    }
+    if (Platform.isAndroid) {
+      if (!isFdroidBuild) {
+        unawaited(checkAppUpdates(context));
+      }
 
-    unawaited(checkNecessaryPermissions(context));
+      unawaited(checkNecessaryPermissions(context));
+    }
   }
 
   @override
