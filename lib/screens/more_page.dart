@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:musify/extensions/l10n.dart';
@@ -100,7 +98,7 @@ class SettingsCards extends StatelessWidget {
             ),
           },
         ),
-        if (Platform.isAndroid)
+        if (isAndroid)
           SettingBar(
             context.l10n()!.localMusic,
             FluentIcons.arrow_download_24_filled,
@@ -371,7 +369,7 @@ class SettingsCards extends StatelessWidget {
             );
           },
         ),
-        if (Platform.isAndroid)
+        if (isAndroid)
           ValueListenableBuilder<bool>(
             valueListenable: foregroundService,
             builder: (_, foregroundValue, __) {
@@ -396,7 +394,7 @@ class SettingsCards extends StatelessWidget {
               );
             },
           ),
-        if (Platform.isAndroid)
+        if (isAndroid)
           SettingBar(
             context.l10n()!.audioFileType,
             FluentIcons.multiselect_ltr_24_filled,
@@ -456,7 +454,7 @@ class SettingsCards extends StatelessWidget {
               ),
             },
           ),
-        if (Platform.isAndroid)
+        if (isAndroid)
           SettingBar(
             context.l10n()!.downloadMode,
             FluentIcons.clock_arrow_download_24_filled,
@@ -581,7 +579,7 @@ class SettingsCards extends StatelessWidget {
             ),
           },
         ),
-        if (Platform.isAndroid && !isFdroidBuild)
+        if (isAndroid && !isFdroidBuild)
           SettingBar(
             context.l10n()!.downloadAppUpdate,
             FluentIcons.arrow_download_24_filled,

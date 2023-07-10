@@ -24,6 +24,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 bool _interrupted = false;
 ThemeMode themeMode = ThemeMode.dark;
 var isFdroidBuild = false;
+final isAndroid = Platform.isAndroid;
 
 final appLanguages = <String, String>{
   'English': 'en',
@@ -121,7 +122,7 @@ class _MyAppState extends State<MyApp> {
       themeMode = getThemeMode(themeModeSetting);
     }
 
-    if (Platform.isAndroid) {
+    if (isAndroid) {
       ReceiveSharingIntent.getTextStream().listen(
         (String? value) async {
           if (value == null) return;
@@ -228,7 +229,7 @@ Future<void> initialisation() async {
   await Hive.openBox('user');
   await Hive.openBox('cache');
 
-  if (Platform.isAndroid) {
+  if (isAndroid) {
     await FlutterDisplayMode.setHighRefreshRate();
 
     audioHandler = await AudioService.init(

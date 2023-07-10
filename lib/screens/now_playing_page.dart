@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -8,6 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
 import 'package:musify/extensions/screen_size.dart';
+import 'package:musify/main.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/services/download_manager.dart';
 import 'package:musify/services/settings_manager.dart';
@@ -279,7 +278,7 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                             if (metadata.extras['ytid'].toString().isNotEmpty)
                               Column(
                                 children: [
-                                  if (Platform.isAndroid)
+                                  if (isAndroid)
                                     IconButton(
                                       color: Theme.of(context).hintColor,
                                       icon: const Icon(

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +27,7 @@ class _MusifyState extends State<Musify> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
+    if (isAndroid) {
       if (!isFdroidBuild) {
         unawaited(checkAppUpdates(context));
       }
@@ -263,7 +261,7 @@ class _MusifyState extends State<Musify> {
       );
 
   Widget _getHomeContent(BuildContext context, List<BottomNavBarItem> items) {
-    if (Platform.isAndroid) {
+    if (isAndroid) {
       return Scaffold(
         body: WillPopScope(
           onWillPop: () async {
