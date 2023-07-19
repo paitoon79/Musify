@@ -1,14 +1,12 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
-import 'package:musify/services/audio_manager.dart';
+import 'package:musify/models/custom_audio_model.dart';
 import 'package:musify/services/offline_audio.dart';
 import 'package:musify/style/app_themes.dart';
-import 'package:musify/utilities/formatter.dart';
+import 'package:musify/widgets/local_song_bar.dart';
 import 'package:musify/widgets/playlist_cube.dart';
 import 'package:musify/widgets/spinner.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class LocalMusicPage extends StatefulWidget {
   @override
@@ -21,17 +19,17 @@ class _LocalMusicPageState extends State<LocalMusicPage> {
   String _searchQuery = '';
 
   Future<void> search() async {
-    _searchQuery = _searchBar.text;
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    final newSearchQuery = _searchBar.text;
+    if (_searchQuery != newSearchQuery) {
+      _searchQuery = newSearchQuery;
+      setState(() {});
+    }
   }
 
   @override
   void dispose() {
+    _searchBar.dispose();
+    _inputNode.dispose();
     super.dispose();
   }
 
@@ -46,73 +44,20 @@ class _LocalMusicPageState extends State<LocalMusicPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    right: 20,
-                    left: 10,
-                    bottom: 10,
-                  ),
-                  child: PlaylistCube(
-                    title: context.l10n()!.localMusic,
-                    cubeIcon: FluentIcons.save_24_filled,
-                    onClickOpen: false,
-                  ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: PlaylistCube(
+                  title: context.l10n()!.localMusic,
+                  cubeIcon: FluentIcons.save_24_filled,
+                  onClickOpen: false,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 12),
-                      Text(
-                        context.l10n()!.localMusic,
-                        style: TextStyle(
-                          color: colorScheme.primary,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 5, bottom: 5),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async => {
-                          setActivePlaylist(
-                            {
-                              'ytid': '',
-                              'title': context.l10n()!.localMusic,
-                              'header_desc': '',
-                              'image': '',
-                              'list': await getMusic(),
-                            },
-                          ),
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            colorScheme.primary,
-                          ),
-                        ),
-                        child: Text(
-                          context.l10n()!.playAll.toUpperCase(),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                top: 12,
-                bottom: 20,
-                left: 12,
-                right: 12,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
               child: TextField(
-                onSubmitted: (String value) {
+                onSubmitted: (_) {
                   search();
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
@@ -150,171 +95,37 @@ class _LocalMusicPageState extends State<LocalMusicPage> {
               ),
             ),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () => {
-                      showModalBottomSheet(
-                        isDismissible: true,
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (BuildContext context) {
-                          final _sortTypes = AudioSortType.values.toList();
-
-                          return Center(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: colorScheme.primary,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                              ),
-                              width:
-                                  MediaQuery.of(context).copyWith().size.width *
-                                      0.90,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: _sortTypes.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Card(
-                                      child: ListTile(
-                                        title: Text(
-                                          _sortTypes[index].name,
-                                        ),
-                                        onTap: () {
-                                          setState(() {
-                                            upadateSortType(_sortTypes[index]);
-                                            Navigator.pop(context);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    },
-                    icon: const Icon(FluentIcons.arrow_sort_24_filled),
-                  )
-                ],
-              ),
-            ),
-            FutureBuilder<List<AudioModel>>(
-              future: Future.delayed(
-                const Duration(milliseconds: 500),
-                () => getMusic(searchQuery: _searchQuery),
-              ),
+            FutureBuilder<List<AudioModelWithArtwork>>(
+              future: getMusic(searchQuery: _searchQuery),
               builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.all(35),
                       child: Spinner(),
                     ),
                   );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      context.l10n()!.error,
+                      style: TextStyle(color: colorScheme.primary),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    addAutomaticKeepAlives: false,
+                    addRepaintBoundaries: false,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return LocalSongBar(index, snapshot.data![index]);
+                    },
+                  );
                 }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  addAutomaticKeepAlives: false,
-                  addRepaintBoundaries: false,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final lsong = returnSongLayoutFromAudioModel(
-                      index,
-                      snapshot.data![index],
-                    );
-
-                    return Container(
-                      padding: const EdgeInsets.only(
-                        left: 12,
-                        right: 12,
-                        bottom: 15,
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () {
-                          playSong(lsong);
-                        },
-                        splashColor: colorScheme.primary.withOpacity(0.4),
-                        hoverColor: colorScheme.primary.withOpacity(0.4),
-                        focusColor: colorScheme.primary.withOpacity(0.4),
-                        highlightColor: colorScheme.primary.withOpacity(0.4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            QueryArtworkWidget(
-                              id: lsong['localSongId'] as int,
-                              type: ArtworkType.AUDIO,
-                              artworkWidth: 60,
-                              artworkHeight: 60,
-                              artworkFit: BoxFit.cover,
-                              artworkBorder: BorderRadius.circular(8),
-                              keepOldArtwork: true,
-                              nullArtworkWidget: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: colorScheme.secondary,
-                                  ),
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        FluentIcons.music_note_1_24_regular,
-                                        size: 30,
-                                        color: Colors.white,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    padding: const EdgeInsets.only(
-                                      left: 15,
-                                    ),
-                                    child: Text(
-                                      overflow: TextOverflow.ellipsis,
-                                      lsong['artist'].toString() == ''
-                                          ? lsong['title'].toString()
-                                          : '${lsong['artist']} - ${lsong['title']}',
-                                      style: TextStyle(
-                                        color: colorScheme.primary,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
               },
-            )
+            ),
           ],
         ),
       ),

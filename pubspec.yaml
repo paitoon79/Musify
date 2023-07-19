@@ -5,11 +5,11 @@ repository: https://github.com/gokadzev/Musify
 issue_tracker: https://github.com/gokadzev/Musify/issues
 
 publish_to: 'none'
-version: 5.6.0+57 # run update.sh after changing the version
+version: 6.0.0+59 # run update.sh after changing the version
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter: ^3.10.5
+  flutter: ^3.10.6
 
 dependencies:
   audio_service:
@@ -19,7 +19,7 @@ dependencies:
   cached_network_image: ^3.2.3
   dynamic_color: ^1.6.5
   file_picker: ^5.3.2
-  fluentui_system_icons: ^1.1.205
+  fluentui_system_icons: ^1.1.206
   flutter:
     sdk: flutter
   flutter_displaymode: ^0.6.0
@@ -35,8 +35,9 @@ dependencies:
   just_audio_windows: ^0.2.0
   on_audio_query:
     path: ./packages/on_audio_query/on_audio_query
+  path: ^1.8.3
   path_provider: ^2.0.15
-  permission_handler: ^10.4.2
+  permission_handler: ^10.4.3
   receive_sharing_intent:
     path: ./packages/receive_sharing_intent
   rxdart: ^0.27.7
@@ -58,6 +59,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/db/playlists.db.json
+    - assets/fonts/roboto/
+    - assets/fonts/paytone/
 
 flutter_native_splash:
   color: '#ffffff'

@@ -7,9 +7,11 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/screens/root_page.dart';
@@ -122,6 +124,8 @@ class _MyAppState extends State<MyApp> {
       themeMode = getThemeMode(themeModeSetting);
     }
 
+    GoogleFonts.config.allowRuntimeFetching = false;
+
     if (isAndroid) {
       ReceiveSharingIntent.getTextStream().listen(
         (String? value) async {
@@ -146,6 +150,15 @@ class _MyAppState extends State<MyApp> {
         },
       );
     }
+
+    LicenseRegistry.addLicense(() async* {
+      final license =
+          await rootBundle.loadString('assets/fonts/roboto/LICENSE.txt');
+      yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+      final license1 =
+          await rootBundle.loadString('assets/fonts/paytone/OFL.txt');
+      yield LicenseEntryWithLineBreaks(['google_fonts'], license1);
+    });
   }
 
   @override
@@ -195,7 +208,6 @@ class _MyAppState extends State<MyApp> {
 
         return MaterialApp(
           themeMode: themeMode,
-          debugShowCheckedModeBanner: kDebugMode,
           darkTheme: darkColorScheme != null && useSystemColor.value
               ? darkTheme
               : getAppDarkTheme(),

@@ -1,5 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
 import 'package:musify/extensions/screen_size.dart';
@@ -25,8 +26,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Musify.',
+          style: GoogleFonts.paytoneOne(color: colorScheme.primary),
         ),
       ),
       body: SingleChildScrollView(
@@ -53,7 +55,6 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   width: context.screenSize.width / 1.4,
                                   child: MarqueeWidget(
-                                    direction: Axis.horizontal,
                                     child: Text(
                                       context.l10n()!.suggestedPlaylists,
                                       style: TextStyle(
@@ -140,7 +141,6 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               width: context.screenSize.width / 1.4,
                               child: MarqueeWidget(
-                                direction: Axis.horizontal,
                                 child: Text(
                                   context.l10n()!.suggestedArtists,
                                   style: TextStyle(
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             FutureBuilder(
-              future: get10Music('PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx'),
+              future: getRecommendedSongs(),
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
@@ -221,15 +221,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                     if (!snapshot.hasData) {
-                      return Center(
-                        child: Text(
-                          'Nothing Found!',
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontSize: 18,
-                          ),
-                        ),
-                      );
+                      return const SizedBox.shrink();
                     }
                     return Wrap(
                       children: <Widget>[

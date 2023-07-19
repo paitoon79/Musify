@@ -6,13 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:just_audio/just_audio.dart';
 import 'package:musify/extensions/l10n.dart';
+import 'package:musify/models/custom_audio_model.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/services/data_manager.dart';
+import 'package:musify/utilities/flutter_toast.dart';
 import 'package:musify/utilities/formatter.dart';
 import 'package:musify/utilities/mediaitem.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 final yt = YoutubeExplode();
@@ -57,26 +57,19 @@ Future<List> fetchSongsList(String searchQuery) async {
   return searchedList;
 }
 
-Future get10Music(dynamic playlistid) async {
-  final List playlistSongs =
-      await getData('cache', 'playlist10Songs$playlistid') ?? [];
-  if (playlistSongs.isEmpty) {
-    try {
-      final List<dynamic> ytSongs =
-          await yt.playlists.getVideos(playlistid).take(10).toList();
-      final tenSongs = List<dynamic>.generate(
-        ytSongs.length,
-        (index) => returnSongLayout(index, ytSongs[index]),
-      );
-      playlistSongs.addAll(tenSongs);
+Future<List> getRecommendedSongs() async {
+  const playlistId = 'PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx';
+  var playlistSongs = [...userLikedSongsList, ...userRecentlyPlayed];
 
-      addOrUpdateData('cache', 'playlist10Songs$playlistid', playlistSongs);
-    } catch (e) {
-      debugPrint('Error retrieving playlist songs: $e');
-      return null;
-    }
-  }
-  return playlistSongs;
+  final ytSongs = await getSongsFromPlaylist(playlistId);
+  playlistSongs += ytSongs.take(10).toList();
+
+  playlistSongs.shuffle();
+
+  final seenYtIds = <String>{};
+  playlistSongs.removeWhere((song) => !seenYtIds.add(song['ytid']));
+
+  return playlistSongs.take(15).toList();
 }
 
 Future<List<dynamic>> getUserPlaylists() async {
@@ -268,45 +261,69 @@ Future<List> getSongsFromPlaylist(dynamic playlistId) async {
   return songList;
 }
 
+Future updatePlaylistList(
+  BuildContext context,
+  dynamic playlistId,
+) async {
+  final index = findPlaylistIndexByYtId(playlistId);
+  if (index != -1) {
+    final songList = [];
+    await for (final song in yt.playlists.getVideos(playlistId)) {
+      songList.add(returnSongLayout(songList.length, song));
+    }
+
+    playlists[index]['list'] = songList;
+    addOrUpdateData('cache', 'playlistSongs$playlistId', songList);
+    showToast(context, context.l10n()!.playlistUpdated);
+  }
+  return playlists[index];
+}
+
+int findPlaylistIndexByYtId(String ytid) {
+  for (var i = 0; i < playlists.length; i++) {
+    if (playlists[i]['ytid'] == ytid) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 Future<void> setActivePlaylist(Map info) async {
   final plist = info['list'] as List;
   activePlaylist = info;
-  if (plist is List<AudioModel>) {
+  id = 0;
+
+  if (plist is List<AudioModelWithArtwork>) {
     activePlaylist['list'] = [];
-    id = 0;
-    final activeTempPlaylist = <AudioSource>[
-      for (final song in plist)
-        createAudioSource(songModelToMediaItem(song, song.data))
-    ];
+    final activeTempPlaylist = plist
+        .map((song) => createAudioSource(songModelToMediaItem(song, song.data)))
+        .toList();
 
     await addSongs(activeTempPlaylist);
     await setNewPlaylist();
 
     await audioPlayer.play();
   } else {
-    id = 0;
     await playSong(activePlaylist['list'][id]);
   }
 }
 
-Future getPlaylistInfoForWidget(dynamic id) async {
-  var searchPlaylist = playlists.where((list) => list['ytid'] == id).toList();
-  var isUserPlaylist = false;
+Future<Map<String, dynamic>?> getPlaylistInfoForWidget(dynamic id) async {
+  Map<String, dynamic>? playlist =
+      playlists.firstWhere((list) => list['ytid'] == id, orElse: () => null);
 
-  if (searchPlaylist.isEmpty) {
+  if (playlist == null) {
     final usPlaylists = await getUserPlaylists();
-    searchPlaylist = usPlaylists.where((list) => list['ytid'] == id).toList();
-    isUserPlaylist = true;
+    playlist = usPlaylists.firstWhere(
+      (list) => list['ytid'] == id,
+      orElse: () => null,
+    );
   }
 
-  final playlist = searchPlaylist[0];
-
-  if (playlist['list'].length == 0) {
-    searchPlaylist[searchPlaylist.indexOf(playlist)]['list'] =
-        await getSongsFromPlaylist(playlist['ytid']);
-    if (!isUserPlaylist) {
-      playlists[playlists.indexOf(playlist)]['list'] =
-          searchPlaylist[searchPlaylist.indexOf(playlist)]['list'];
+  if (playlist != null && playlist['list'].isEmpty) {
+    playlist['list'] = await getSongsFromPlaylist(playlist['ytid']);
+    if (!playlists.contains(playlist)) {
+      playlists.add(playlist);
     }
   }
 
@@ -365,7 +382,8 @@ Future<void> updateRecentlyPlayed(dynamic songId) async {
   }
   userRecentlyPlayed.removeWhere((song) => song['ytid'] == songId);
 
-  userRecentlyPlayed
-      .add(await getSongDetails(userRecentlyPlayed.length, songId));
+  final newSongDetails =
+      await getSongDetails(userRecentlyPlayed.length, songId);
+  userRecentlyPlayed.add(newSongDetails);
   addOrUpdateData('user', 'recentlyPlayedSongs', userRecentlyPlayed);
 }

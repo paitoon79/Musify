@@ -14,11 +14,8 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true"
-        android:extractNativeLibs="true">
-
-        <meta-data
-            android:name="com.google.android.gms.car.application"
-            android:resource="@xml/automotive_app_desc" />
+        android:extractNativeLibs="true"
+        tools:replace="android:extractNativeLibs">
 
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"

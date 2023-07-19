@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
 import 'package:musify/extensions/screen_size.dart';
+import 'package:musify/services/download_manager.dart';
 import 'package:musify/style/app_themes.dart';
 import 'package:musify/utilities/flutter_toast.dart';
 import 'package:musify/widgets/playlist_cube.dart';
@@ -34,9 +36,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
     _isLoading = true;
     getPlaylistInfoForWidget(widget.playlistId).then(
       (value) => {
-        _playlist = value,
-        _hasMore = true,
-        _loadMore(),
+        if (value != null)
+          {
+            _playlist = value,
+            _hasMore = true,
+            _loadMore(),
+          }
       },
     );
   }
@@ -89,14 +94,14 @@ class _PlaylistPageState extends State<PlaylistPage> {
       body: SingleChildScrollView(
         child: _playlist != null
             ? Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildPlaylistImage(),
                   _buildPlaylistTitle(),
+                  _buildPlaylistSongsNumber(_playlist['list'].length),
                   if (_playlist['header_desc'] != null)
                     _buildPlaylistDescription(),
-                  const SizedBox(height: 10),
-                  _buildPlayAllButton(),
+                  const SizedBox(height: 20),
+                  _buildPlaylistButtons(),
                   const SizedBox(height: 30),
                   if (_songsList.isNotEmpty)
                     _buildSongList()
@@ -139,6 +144,20 @@ class _PlaylistPageState extends State<PlaylistPage> {
     );
   }
 
+  Widget _buildPlaylistSongsNumber(int number) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        '[ $number ${context.l10n()!.songs} ]'.toUpperCase(),
+        textAlign: TextAlign.center,
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium!
+            .copyWith(color: colorScheme.primary, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
   Widget _buildPlaylistDescription() {
     return Text(
       _playlist['header_desc'].toString(),
@@ -147,24 +166,54 @@ class _PlaylistPageState extends State<PlaylistPage> {
     );
   }
 
-  Widget _buildPlayAllButton() {
-    return ElevatedButton(
-      onPressed: () {
-        setActivePlaylist(_playlist);
-        showToast(
-          context,
-          context.l10n()!.queueInitText,
-        );
-      },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          colorScheme.primary,
+  Widget _buildPlaylistButtons() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            PlaylistButton(
+              label: context.l10n()!.playAll,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              onPressed: () {
+                setActivePlaylist(_playlist);
+                showToast(
+                  context,
+                  context.l10n()!.queueInitText,
+                );
+              },
+            ),
+            const SizedBox(width: 10),
+            PlaylistButton(
+              label: context.l10n()!.downloadAll,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              onPressed: () {
+                downloadSongsFromPlaylist(context, _playlist['list']);
+              },
+            ),
+          ],
         ),
-      ),
-      child: Text(
-        context.l10n()!.playAll.toUpperCase(),
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
+        const SizedBox(height: 10),
+        IconButton(
+          iconSize: 30,
+          onPressed: () async {
+            _playlist = await updatePlaylistList(context, _playlist['ytid']);
+
+            _hasMore = true;
+            _songsList.clear();
+
+            setState(() {
+              _currentPage = 0;
+              _currentLastLoadedId = 0;
+            });
+
+            _loadMore();
+
+            setState(() {});
+          },
+          icon: const Icon(FluentIcons.arrow_sync_24_filled),
+        )
+      ],
     );
   }
 
@@ -198,5 +247,36 @@ class _PlaylistPageState extends State<PlaylistPage> {
         height: context.screenSize.height - 100,
         child: const Spinner(),
       );
+  }
+}
+
+class PlaylistButton extends StatelessWidget {
+  const PlaylistButton({
+    required this.label,
+    required this.backgroundColor,
+    required this.onPressed,
+  });
+  final String label;
+  final Color backgroundColor;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          label.toUpperCase(),
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Colors.white,
+              ),
+        ),
+      ),
+    );
   }
 }

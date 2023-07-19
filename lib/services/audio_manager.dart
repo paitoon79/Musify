@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/services/data_manager.dart';
+import 'package:musify/services/offline_audio.dart';
 import 'package:musify/services/settings_manager.dart';
 import 'package:musify/utilities/mediaitem.dart';
 import 'package:rxdart/rxdart.dart';
@@ -37,8 +38,8 @@ final _playlist = ConcatenatingAudioSource(children: []);
 final Random _random = Random();
 
 bool get currentModeIsLocal {
-  final tag = audioPlayer.sequenceState!.currentSource!.tag;
-  return tag.extras['localSongId'] is int;
+  final tag = audioPlayer.sequenceState?.currentSource?.tag;
+  return tag?.extras?['localSongId'] is int;
 }
 
 bool get hasNext {
@@ -56,14 +57,7 @@ bool get hasPrevious {
 }
 
 Future<void> playSong(Map song) async {
-  final isYoutubeSong = song['ytid'].length != 0;
-  final songUrl = isYoutubeSong
-      ? await getSong(song['ytid'], song['isLive'])
-      : song['songUrl'].toString();
-
-  if (!isYoutubeSong && activePlaylist['list'].length != 0) {
-    activePlaylist['list'].length = 0;
-  }
+  final songUrl = await getSong(song['ytid'], song['isLive']);
 
   try {
     await checkIfSponsorBlockIsAvailable(song, songUrl);
@@ -71,6 +65,20 @@ Future<void> playSong(Map song) async {
   } catch (e) {
     debugPrint('Error playing song: $e');
   }
+}
+
+Future<void> playLocalSong(int index) async {
+  if (!currentModeIsLocal) {
+    await _playlist.clear();
+    await moveAudiosToQueue();
+    await setNewPlaylist();
+  }
+
+  if (index < 0 || index >= _playlist.children.length) return;
+
+  await audioHandler.skipToQueueItem(index);
+
+  await audioPlayer.play();
 }
 
 Future<void> playNext() async {
@@ -119,7 +127,7 @@ Future<void> checkIfSponsorBlockIsAvailable(song, songUrl) async {
     Uri.parse(songUrl),
     tag: mapToMediaItem(song, songUrl),
   );
-  if (sponsorBlockSupport.value && song['ytid'].length != 0) {
+  if (sponsorBlockSupport.value) {
     final segments = await getSkipSegments(song['ytid']);
     if (segments.isNotEmpty) {
       if (segments.length == 1) {

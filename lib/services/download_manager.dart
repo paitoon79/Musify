@@ -6,8 +6,8 @@ import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
 import 'package:musify/services/settings_manager.dart';
 import 'package:musify/utilities/flutter_toast.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 final supportedFolderNames = ['Music', 'Documents', 'Downloads'];
@@ -76,9 +76,29 @@ Future<void> downloadSongFaster(BuildContext context, dynamic song) async {
 
     await FileDownloader()
         .moveFileToSharedStorage(file.path, SharedStorage.audio);
-    showToast(context, context.l10n()!.downloadCompleted);
+    showToast(context, '${context.l10n()!.downloadCompleted} - $songName');
   } catch (e) {
     debugPrint('Error while downloading song: $e');
+    showToast(context, '${context.l10n()!.downloadFailed}, $e');
+  }
+}
+
+Future<void> downloadSongsFromPlaylist(
+  BuildContext context,
+  List list,
+) async {
+  try {
+    final _isHeavyProcess = list.length > 50;
+    final _pauseDuration = _isHeavyProcess
+        ? const Duration(seconds: 10)
+        : const Duration(seconds: 5);
+    showToast(context, context.l10n()!.fasterDownloadMsg);
+    for (final song in list) {
+      await downloadSongFaster(context, song);
+      await Future.delayed(_pauseDuration);
+    }
+  } catch (e) {
+    debugPrint('Error while downloading playlist songs: $e');
     showToast(context, '${context.l10n()!.downloadFailed}, $e');
   }
 }

@@ -2,7 +2,7 @@ import 'package:musify/utilities/mediaitem.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-String formatSongTitle(String title, {bool removeFileExtension = false}) {
+String formatSongTitle(String title) {
   final patterns = {
     RegExp(r'\[.*\]'): '',
     RegExp(r'\(.*'): '',
@@ -11,13 +11,6 @@ String formatSongTitle(String title, {bool removeFileExtension = false}) {
 
   for (final pattern in patterns.keys) {
     title = title.replaceFirst(pattern, patterns[pattern]!);
-  }
-
-  if (removeFileExtension) {
-    final fileExtensions = ['.mp3', '.flac', '.m4a'];
-    for (final ext in fileExtensions) {
-      title = title.replaceFirst(ext, '');
-    }
   }
 
   return title
@@ -44,18 +37,12 @@ Map<String, dynamic> returnSongLayoutFromAudioModel(
   dynamic index,
   AudioModel song,
 ) {
-  final _isArtistInTags = song.artist != null;
   return {
     'id': index,
     'ytid': '',
-    'title': _isArtistInTags
-        ? song.title
-        : formatSongTitle(
-            song.displayName,
-            removeFileExtension: true,
-          ),
+    'title': song.displayNameWOExt,
     'image': noImageVar,
-    'artist': _isArtistInTags ? song.artist : '',
+    'artist': song.artist ?? '',
     'lowResImage': noImageVar,
     'highResImage': noImageVar,
     'songUrl': song.data,
@@ -65,3 +52,9 @@ Map<String, dynamic> returnSongLayoutFromAudioModel(
 }
 
 String? getSongId(String url) => VideoId.parseVideoId(url);
+
+String formatDuration(int durationInMillis) {
+  final minutes = (durationInMillis / (1000 * 60)).truncate();
+  final seconds = ((durationInMillis / 1000) % 60).truncate();
+  return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+}
