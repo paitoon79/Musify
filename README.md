@@ -1,5 +1,6 @@
-<p align="center"><img width="200" src="https://github.com/gokadzev/Musify/raw/master/android/app/src/main/res/mipmap-xxxhdpi/launcher_icon.png"></p>
-<h1 align="center">Musify</h1>
+<p align="center">
+    <img src="https://github.com/gokadzev/Musify/raw/master/assets/images/Musify-banner.png" width="100%">
+</p>
 
 <p align="center">
     Music Streaming and Downloading app made in Flutter!
@@ -30,7 +31,7 @@
     No Ads :no_entry_sign:<br>
     No Subscriptions :dollar:<br>
     Inbuilt Updater :new:<br>
-    14 Supported Languages :us:<br>
+    17 Supported Languages :us:<br>
     Material UI & Accent Colors & Dynamic Colors (Android 12+) :art: <br>
 
 ---
