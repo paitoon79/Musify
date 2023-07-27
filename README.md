@@ -47,7 +47,8 @@
 ---
 
   <h3 align="center">Download :floppy_disk:</h3>
-     <p align="center" style="align-items:center"><a href="https://github.com/gokadzev/Musify/releases" rel="GitHub Releases"><img width="100" height="100" src="https://telegra.ph/file/21bb2cc648561f192cea4.png"></a><a href="https://f-droid.org/packages/com.gokadzev.musify.fdroid/" rel="F-Droid"><img width="250" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"></a><a href="https://apt.izzysoft.de/fdroid/index/apk/com.gokadzev.musify" rel="IzzySoft"><img width="250" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"></a></p>
+     <p align="center" style="align-items:center"><a href="https://github.com/gokadzev/Musify/releases" rel="GitHub Releases"><img width="250" src="https://github.com/gokadzev/Musify/raw/master/assets/images/get-it-on-github.png"></a><a href="https://f-droid.org/packages/com.gokadzev.musify.fdroid/" rel="F-Droid"><img width="250" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"></a><a href="https://apt.izzysoft.de/fdroid/index/apk/com.gokadzev.musify" rel="IzzySoft"><img width="250" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"></a></p>
+
 
 ---
 
@@ -113,5 +114,10 @@ Contributions are always welcome. Please read our [contributing guidelines](http
 
 ---
 
-<h3 align="center">Do you like the project? :heartpulse:	</h3>
-<p align="center" ><a href="https://ko-fi.com/gokadzev" target="_blank"><img src="https://storage.ko-fi.com/cdn/brandasset/kofi_button_dark.png" style="width: 30%;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> </p>
+<h3 align="center">Do you like the project? Sponsor it! :heartpulse:	</h3>
+
+<div align="center">
+  <a href="https://ko-fi.com/gokadzev">
+    <img width="32%" src="https://storage.ko-fi.com/cdn/brandasset/logo_white_stroke.png" alt="ko-fi">
+  </a>
+</div>

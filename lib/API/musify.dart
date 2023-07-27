@@ -10,6 +10,7 @@ import 'package:musify/extensions/l10n.dart';
 import 'package:musify/models/custom_audio_model.dart';
 import 'package:musify/services/audio_manager.dart';
 import 'package:musify/services/data_manager.dart';
+import 'package:musify/services/logger.service.dart';
 import 'package:musify/utilities/flutter_toast.dart';
 import 'package:musify/utilities/formatter.dart';
 import 'package:musify/utilities/mediaitem.dart';
@@ -45,31 +46,41 @@ final currentRecentlyPlayedLength =
 int id = 0;
 
 Future<List> fetchSongsList(String searchQuery) async {
-  final List list = await yt.search.search(searchQuery);
-  final searchedList = [
-    for (final s in list)
-      returnSongLayout(
-        0,
-        s,
-      )
-  ];
+  try {
+    final List list = await yt.search.search(searchQuery);
+    final searchedList = [
+      for (final s in list)
+        returnSongLayout(
+          0,
+          s,
+        )
+    ];
 
-  return searchedList;
+    return searchedList;
+  } catch (e) {
+    Logger.log('Error in fetchSongsList: $e');
+    return [];
+  }
 }
 
 Future<List> getRecommendedSongs() async {
-  const playlistId = 'PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx';
-  var playlistSongs = [...userLikedSongsList, ...userRecentlyPlayed];
+  try {
+    const playlistId = 'PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx';
+    var playlistSongs = [...userLikedSongsList, ...userRecentlyPlayed];
 
-  final ytSongs = await getSongsFromPlaylist(playlistId);
-  playlistSongs += ytSongs.take(10).toList();
+    final ytSongs = await getSongsFromPlaylist(playlistId);
+    playlistSongs += ytSongs.take(10).toList();
 
-  playlistSongs.shuffle();
+    playlistSongs.shuffle();
 
-  final seenYtIds = <String>{};
-  playlistSongs.removeWhere((song) => !seenYtIds.add(song['ytid']));
+    final seenYtIds = <String>{};
+    playlistSongs.removeWhere((song) => !seenYtIds.add(song['ytid']));
 
-  return playlistSongs.take(15).toList();
+    return playlistSongs.take(15).toList();
+  } catch (e) {
+    Logger.log('Error in getRecommendedSongs: $e');
+    return [];
+  }
 }
 
 Future<List<dynamic>> getUserPlaylists() async {
@@ -196,7 +207,7 @@ Future<List> getSearchSuggestions(String query) async {
     final res = jsonDecode(response.body)[1] as List;
     return res;
   } catch (e) {
-    debugPrint('Error in getSearchSuggestions: $e');
+    Logger.log('Error in getSearchSuggestions: $e');
     return [];
   }
 }
@@ -235,7 +246,7 @@ Future<List<Map<String, int>>> getSkipSegments(String id) async {
       return [];
     }
   } catch (e, stack) {
-    debugPrint('$e $stack');
+    Logger.log('Error in getSkipSegments: $e $stack');
     return [];
   }
 }
@@ -336,7 +347,7 @@ Future<AudioOnlyStreamInfo> getSongManifest(String songId) async {
     final audioStream = manifest.audioOnly.withHighestBitrate();
     return audioStream;
   } catch (e) {
-    debugPrint('Error while getting song streaming manifest: $e');
+    Logger.log('Error while getting song streaming manifest: $e');
     rethrow; // Rethrow the exception to allow the caller to handle it
   }
 }
@@ -358,7 +369,7 @@ Future<String> getSong(String songId, bool isLive) async {
       return audioStream.url.toString();
     }
   } catch (e) {
-    debugPrint('Error while getting song streaming URL: $e');
+    Logger.log('Error while getting song streaming URL: $e');
     rethrow; // Rethrow the exception to allow the caller to handle it
   }
 }
@@ -371,7 +382,7 @@ Future<Map<String, dynamic>> getSongDetails(
     final song = await yt.videos.get(songId);
     return returnSongLayout(songIndex, song);
   } catch (e) {
-    debugPrint('Error while getting song details: $e');
+    Logger.log('Error while getting song details: $e');
     rethrow;
   }
 }

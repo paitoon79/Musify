@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/services/data_manager.dart';
+import 'package:musify/services/logger.service.dart';
 import 'package:musify/services/offline_audio.dart';
 import 'package:musify/services/settings_manager.dart';
 import 'package:musify/utilities/mediaitem.dart';
@@ -57,13 +58,12 @@ bool get hasPrevious {
 }
 
 Future<void> playSong(Map song) async {
-  final songUrl = await getSong(song['ytid'], song['isLive']);
-
   try {
+    final songUrl = await getSong(song['ytid'], song['isLive']);
     await checkIfSponsorBlockIsAvailable(song, songUrl);
     await audioPlayer.play();
   } catch (e) {
-    debugPrint('Error playing song: $e');
+    Logger.log('Error playing song: $e');
   }
 }
 
@@ -194,12 +194,16 @@ Future<void> setNewPlaylist() async {
   try {
     await audioPlayer.setAudioSource(_playlist);
   } catch (e) {
-    debugPrint('Error: $e');
+    Logger.log('Error in setNewPlaylist: $e');
   }
 }
 
 Future<void> addSongs(List<AudioSource> songs) async {
-  await _playlist.addAll(songs);
+  try {
+    await _playlist.addAll(songs);
+  } catch (e) {
+    Logger.log('Error adding songs to the playlist: $e');
+  }
 }
 
 class PositionData {
