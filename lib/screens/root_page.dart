@@ -309,6 +309,11 @@ class _MusifyState extends State<Musify> {
                   ValueListenableBuilder<int>(
                     valueListenable: activeTabIndex,
                     builder: (_, value, __) {
+                      if (value < 0 ||
+                          value >= destinations.length ||
+                          value == -1) {
+                        activeTabIndex.value = 0;
+                      }
                       return NavigationRail(
                         unselectedIconTheme:
                             const IconThemeData(color: Colors.white),
