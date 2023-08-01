@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
 import 'package:musify/extensions/screen_size.dart';
+import 'package:musify/main.dart';
 import 'package:musify/screens/artist_page.dart';
 import 'package:musify/screens/playlists_page.dart';
 import 'package:musify/services/offline_audio.dart';
@@ -24,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final _playlistsNumber = isAndroid ? 5 : 6;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -36,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             FutureBuilder(
-              future: getPlaylists(playlistsNum: 5),
+              future: getPlaylists(playlistsNum: _playlistsNumber),
               builder: (context, AsyncSnapshot<List<dynamic>> data) {
                 return data.hasData
                     ? Column(
