@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
 import 'package:musify/extensions/screen_size.dart';
+import 'package:musify/main.dart';
 import 'package:musify/services/download_manager.dart';
 import 'package:musify/style/app_themes.dart';
 import 'package:musify/utilities/flutter_toast.dart';
@@ -184,13 +185,14 @@ class _PlaylistPageState extends State<PlaylistPage> {
               },
             ),
             const SizedBox(width: 10),
-            PlaylistButton(
-              label: context.l10n()!.downloadAll,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              onPressed: () {
-                downloadSongsFromPlaylist(context, _playlist['list']);
-              },
-            ),
+            if (isAndroid)
+              PlaylistButton(
+                label: context.l10n()!.downloadAll,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                onPressed: () {
+                  downloadSongsFromPlaylist(context, _playlist['list']);
+                },
+              ),
           ],
         ),
         const SizedBox(height: 10),
