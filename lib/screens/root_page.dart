@@ -66,21 +66,22 @@ class _MusifyState extends State<Musify> {
                 padding: const EdgeInsets.only(top: 5, bottom: 2),
                 child: Row(
                   children: <Widget>[
-                    IconButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      icon: const Icon(
-                        FluentIcons.arrow_up_24_filled,
-                        size: 22,
+                    if (isAndroid)
+                      IconButton(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        icon: const Icon(
+                          FluentIcons.arrow_up_24_filled,
+                          size: 22,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NowPlayingPage(),
+                            ),
+                          );
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NowPlayingPage(),
-                          ),
-                        );
-                      },
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 7,
