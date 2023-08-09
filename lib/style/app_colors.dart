@@ -5,9 +5,8 @@ const availableColors = <Color>[
   Color(0xFF00FA9A), // Medium Spring Green
   Color(0xFFF08080), // Light Coral
   Color(0xFF6495ED), // Cornflower Blue
-  Color(0xFFFFAFCF), // Pink Lavender
   Color(0xFFC8B6FF), // Lavender Blue
-  Color.fromARGB(255, 226, 192, 159), // Pale Peach
+  Color(0xFFE2C09F), // Pale Peach
   Color(0xFFAABBCC), // Light Steel Blue
   Color(0xFFFFC0CB), // Pink
   Color(0xFFFFD700), // Gold
@@ -27,6 +26,6 @@ const availableColors = <Color>[
   Color(0xFF009688), // Material Teal
   Color(0xFFCDDC39), // Lime
   Color(0xFF00BCD4), // Material Cyan
-  Color(0xFF795548), // Material Brown
+  Color(0xFFC4A092), // Material Brown
   Color(0xFF9E9E9E), // Material Grey
 ];

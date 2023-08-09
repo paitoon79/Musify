@@ -35,6 +35,7 @@ class ArtistCube extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
+                color: colorScheme.surface,
                 FluentIcons.person_24_regular,
                 size: iconSize,
               ),

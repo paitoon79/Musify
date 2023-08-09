@@ -38,11 +38,25 @@
 
 <h3 align="center">Screenshots :camera:</h3>
 
-<div align="center" style="width:100%;display:flex;justify-content:space-between;">
-<img width="32%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/01.jpg" align="center" alt="screenshot" />
-<img width="32%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/02.jpg" align="center" alt="screenshot" />
-<img width="32%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/03.jpg" align="center" alt="screenshot" />
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img width="100%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/01.jpg" alt="screenshot 1">
+      </td>
+      <td align="center">
+        <img width="100%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/02.jpg" alt="screenshot 2">
+      </td>
+      <td align="center">
+        <img width="100%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/03.jpg" alt="screenshot 3">
+      </td>
+      <td align="center">
+        <img width="100%" src="https://raw.githubusercontent.com/gokadzev/Musify/master/fastlane/metadata/android/en-US/images/phoneScreenshots/04.jpg" alt="screenshot 4">
+      </td>
+    </tr>
+  </table>
 </div>
+
 
 ---
 
@@ -104,6 +118,13 @@ flutter run --flavor github
 <h3 align="center">Contribute :pencil2:</h3>
 
 Contributions are always welcome. Please read our [contributing guidelines](https://github.com/gokadzev/Musify/blob/master/CONTRIBUTING.md) before contributing.
+
+
+---
+
+<h3 align="center">F.A.Q :question: </h3>
+
+You can see frequently asked questions and their answers [here](https://github.com/gokadzev/Musify/discussions/112).
 
 
 ---

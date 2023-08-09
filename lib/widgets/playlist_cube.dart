@@ -13,6 +13,7 @@ class PlaylistCube extends StatelessWidget {
     this.image,
     required this.title,
     this.onClickOpen = true,
+    this.showFavoriteButton = true,
     this.cubeIcon = FluentIcons.music_note_1_24_regular,
     this.size = 220,
     this.zoomNumber = 0.5,
@@ -22,6 +23,7 @@ class PlaylistCube extends StatelessWidget {
   final dynamic image;
   final String title;
   final bool onClickOpen;
+  final bool showFavoriteButton;
   final IconData cubeIcon;
   final double size;
   final double zoomNumber;
@@ -66,7 +68,7 @@ class PlaylistCube extends StatelessWidget {
             ),
           ),
         ),
-        if (id != null)
+        if (id != null && showFavoriteButton)
           ValueListenableBuilder<bool>(
             valueListenable: playlistLikeStatus,
             builder: (_, value, __) {
@@ -120,12 +122,16 @@ class PlaylistCube extends StatelessWidget {
             Icon(
               cubeIcon,
               size: 30,
+              color: colorScheme.surface,
             ),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ],

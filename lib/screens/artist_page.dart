@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:musify/API/musify.dart';
 import 'package:musify/extensions/l10n.dart';
@@ -90,28 +91,11 @@ class _ArtistPagePageState extends State<ArtistPage> {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setActivePlaylist(widget.playlist);
-                      showToast(
-                        context,
-                        context.l10n()!.queueInitText,
-                      );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        colorScheme.primary,
-                      ),
-                    ),
-                    child: Text(
-                      context.l10n()!.playAll.toUpperCase(),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
+                  buildPlayButton(),
                   MaterialBarSwitcher(
                     firstBarTitle: context.l10n()!.offlineResults,
                     secondBarTitle: context.l10n()!.onlineResults,
-                    firstBarChild: ListView.builder(
+                    firstBarChild: ListView.separated(
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       itemCount:
@@ -128,6 +112,9 @@ class _ArtistPagePageState extends State<ArtistPage> {
                           getMusicIndex(_songsList[index]) ?? index,
                           _songsList[index],
                         );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(height: 15);
                       },
                     ),
                     secondBarChild: FutureBuilder(
@@ -157,7 +144,7 @@ class _ArtistPagePageState extends State<ArtistPage> {
                           }
                           return Wrap(
                             children: <Widget>[
-                              ListView.builder(
+                              ListView.separated(
                                 shrinkWrap: true,
                                 addAutomaticKeepAlives: false,
                                 addRepaintBoundaries: false,
@@ -165,6 +152,10 @@ class _ArtistPagePageState extends State<ArtistPage> {
                                 itemCount: snapshot.data.length as int,
                                 itemBuilder: (context, index) {
                                   return SongBar(snapshot.data[index], true);
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const SizedBox(height: 15);
                                 },
                               )
                             ],
@@ -181,6 +172,23 @@ class _ArtistPagePageState extends State<ArtistPage> {
                 height: context.screenSize.height - 100,
                 child: const Spinner(),
               ),
+      ),
+    );
+  }
+
+  Widget buildPlayButton() {
+    return GestureDetector(
+      onTap: () {
+        setActivePlaylist(widget.playlist);
+        showToast(
+          context,
+          context.l10n()!.queueInitText,
+        );
+      },
+      child: Icon(
+        FluentIcons.play_circle_48_filled,
+        color: colorScheme.primary,
+        size: 60,
       ),
     );
   }

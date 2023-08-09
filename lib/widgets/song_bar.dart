@@ -9,7 +9,7 @@ import 'package:musify/services/settings_manager.dart';
 import 'package:musify/style/app_themes.dart';
 
 class SongBar extends StatelessWidget {
-  SongBar(this.song, this.clearPlaylist, {super.key});
+  SongBar(this.song, this.clearPlaylist);
 
   final dynamic song;
   final bool clearPlaylist;
