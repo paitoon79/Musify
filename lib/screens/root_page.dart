@@ -71,7 +71,7 @@ class _MusifyState extends State<Musify> {
                         icon: Icon(
                           FluentIcons.arrow_up_24_filled,
                           size: 22,
-                        color: colorScheme.primary,
+                          color: colorScheme.primary,
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -132,7 +132,7 @@ class _MusifyState extends State<Musify> {
                             color: colorScheme.primary,
                             fontSize: 15,
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const Spacer(),
@@ -175,13 +175,13 @@ class _MusifyState extends State<Musify> {
                           );
                         },
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
             );
           },
-        )
+        ),
       ],
     );
   }

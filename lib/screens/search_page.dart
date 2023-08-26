@@ -185,12 +185,13 @@ class _SearchPageState extends State<SearchPage> {
                   return SongBar(
                     _searchResult[index],
                     true,
+                    showMusicDuration: true,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(height: 15);
                 },
-              )
+              ),
           ],
         ),
       ),

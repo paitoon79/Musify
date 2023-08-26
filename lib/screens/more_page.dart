@@ -191,7 +191,7 @@ class SettingsCards extends StatelessWidget {
                                   ),
                                 )
                               else
-                                const SizedBox.shrink()
+                                const SizedBox.shrink(),
                             ],
                           ),
                         );
@@ -215,7 +215,7 @@ class SettingsCards extends StatelessWidget {
                 final availableModes = [
                   ThemeMode.system,
                   ThemeMode.light,
-                  ThemeMode.dark
+                  ThemeMode.dark,
                 ];
                 return Center(
                   child: Container(
@@ -328,7 +328,7 @@ class SettingsCards extends StatelessWidget {
           },
         ),
         SettingSwitchBar(
-          context.l10n()!.useSystemColor,
+          context.l10n()!.dynamicColor,
           FluentIcons.toggle_left_24_filled,
           useSystemColor.value,
           (value) {
@@ -353,7 +353,7 @@ class SettingsCards extends StatelessWidget {
           valueListenable: sponsorBlockSupport,
           builder: (_, value, __) {
             return SettingSwitchBar(
-              'SponsorBlock',
+              'SponsorBlock [BETA]',
               FluentIcons.presence_blocked_24_regular,
               value,
               (value) {
@@ -551,7 +551,7 @@ class SettingsCards extends StatelessWidget {
             showToast(
               context,
               '${context.l10n()!.cacheMsg}!',
-            )
+            ),
           },
         ),
         SettingBar(
@@ -639,7 +639,7 @@ class SettingsCards extends StatelessWidget {
         ),
         const SizedBox(
           height: 20,
-        )
+        ),
       ],
     );
   }

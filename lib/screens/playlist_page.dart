@@ -45,7 +45,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
             _playlist = value,
             _hasMore = true,
             _loadMore(),
-          }
+          },
       },
     );
   }
@@ -194,7 +194,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
             if (isAndroid) _buildDownloadButton(),
             _buildSyncButton(),
           ],
-        )
+        ),
       ],
     );
   }
