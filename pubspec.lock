@@ -28,18 +28,27 @@ packages:
   audio_service:
     dependency: "direct main"
     description:
-      path: "packages/audio_service/audio_service"
-      relative: true
-    source: path
-    version: "0.18.10"
+      name: audio_service
+      sha256: a4d989f1225ea9621898d60f23236dcbfc04876fa316086c23c5c4af075dbac4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.12"
   audio_service_platform_interface:
     dependency: transitive
     description:
       name: audio_service_platform_interface
-      sha256: "2c3a1d52803931e836b9693547a71c0c3585ad54219d2214219ed5cfcc3c1af4"
+      sha256: "8431a455dac9916cc9ee6f7da5620a666436345c906ad2ebb7fa41d18b3c1bf4"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
+  audio_service_web:
+    dependency: transitive
+    description:
+      name: audio_service_web
+      sha256: "523e64ddc914c714d53eec2da85bba1074f08cf26c786d4efb322de510815ea7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   audio_session:
     dependency: "direct main"
     description:
@@ -52,10 +61,10 @@ packages:
     dependency: "direct main"
     description:
       name: background_downloader
-      sha256: "3a2ddf08eeaa20723b5ddbb6a85c2568a9ba641e34cae5fc6a0300808a28581e"
+      sha256: "661bd9bfb12067fb8ccf75073b8fba692d80d97e4d6e0762500c29fa40a787a6"
       url: "https://pub.dev"
     source: hosted
-    version: "7.9.2"
+    version: "7.9.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -196,18 +205,18 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "21145c9c268d54b1f771d8380c195d2d6f655e0567dc1ca2f9c134c02c819e0a"
+      sha256: be325344c1f3070354a1d84a231a1ba75ea85d413774ec4bdf444c023342e030
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.3"
+    version: "5.5.0"
   fluentui_system_icons:
     dependency: "direct main"
     description:
       name: fluentui_system_icons
-      sha256: ade8a693ed9e01e26697d6bc24cd679a401c3189b4f590ef5674547c46d4b418
+      sha256: "2a4a4bdc35e6109e7f81d6427c19653e547f123ffb6b00ecbbf8d41587cce8c9"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.210"
+    version: "1.1.216"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -376,10 +385,10 @@ packages:
     dependency: "direct main"
     description:
       name: just_audio
-      sha256: "890cd0fc41a1a4530c171e375a2a3fb6a09d84e9d508c5195f40bcff54330327"
+      sha256: "5ed0cd723e17dfd8cd4b0253726221e67f6546841ea4553635cf895061fc335b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.34"
+    version: "0.9.35"
   just_audio_mpv:
     dependency: "direct main"
     description:
@@ -508,10 +517,10 @@ packages:
     dependency: "direct main"
     description:
       name: path_provider
-      sha256: "909b84830485dbcd0308edf6f7368bc8fd76afa26a270420f34cabea2a6467a0"
+      sha256: a1aa8aaa2542a6bc57e381f132af822420216c80d4781f7aa085ca3229208aaa
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   path_provider_android:
     dependency: transitive
     description:
@@ -556,18 +565,18 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-      sha256: "63e5216aae014a72fe9579ccd027323395ce7a98271d9defa9d57320d001af81"
+      sha256: ad65ba9af42a3d067203641de3fd9f547ded1410bad3b84400c2b4899faede70
       url: "https://pub.dev"
     source: hosted
-    version: "10.4.3"
+    version: "11.0.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
-      sha256: "2ffaf52a21f64ac9b35fe7369bb9533edbd4f698e5604db8645b1064ff4cf221"
+      sha256: "740c9c9d3090a29cd2fd1f193bba457ac1d2cef1da0ef91f2630d3d9e3c01c15"
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.3"
+    version: "11.0.2"
   permission_handler_apple:
     dependency: transitive
     description:
@@ -580,10 +589,10 @@ packages:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
-      sha256: "7c6b1500385dd1d2ca61bb89e2488ca178e274a69144d26bbd65e33eae7c02a9"
+      sha256: f2343e9fa9c22ae4fd92d4732755bfe452214e7189afcc097380950cf567b4b2
       url: "https://pub.dev"
     source: hosted
-    version: "3.11.3"
+    version: "3.11.5"
   permission_handler_windows:
     dependency: transitive
     description:
@@ -736,10 +745,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "781bd58a1eb16069412365c98597726cd8810ae27435f04b3b4d3a470bacd61e"
+      sha256: "47e208a6711459d813ba18af120d9663c20bdf6985d6ad39fe165d2538378d27"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.12"
+    version: "6.1.14"
   url_launcher_android:
     dependency: transitive
     description:
@@ -862,4 +871,4 @@ packages:
     version: "2.0.2"
 sdks:
   dart: ">=3.1.0 <4.0.0"
-  flutter: ">=3.13.0"
+  flutter: ">=3.13.3"

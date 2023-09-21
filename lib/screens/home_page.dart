@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                                     );
                                   });
                                 },
-                                child: ArtistCube(artist: artist),
+                                child: ArtistCube(artist),
                               ),
                             );
                           },

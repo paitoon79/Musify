@@ -11,6 +11,7 @@
   "backedupSuccess": "Backup realizado com sucesso",
   "backupError": "Erro ao fazer backup dos dados",
   "backupUserData": "Fazer backup dos dados",
+  "becomeSponsor": "Torne-se um patrocinador",
   "cacheMsg": "Cache limpo",
   "chooseBackupDir": "Escolher diretório de backup",
   "chooseRestoreDir": "Escolher diretório do arquivo de restauração",
@@ -30,7 +31,6 @@
   "errorWhileRequestingPerms": "Erro ao solicitar permissões",
   "falseMSG": "Falso",
   "fasterDownloadMsg": "O modo de download mais rápido está na fase BETA e não possui uma notificação para o status do download.",
-  "foregroundService": "Serviço em primeiro plano",
   "home": "Início",
   "language": "Idioma",
   "languageMsg": "O idioma foi alterado",
@@ -68,6 +68,6 @@
   "userLikedPlaylists": "Listas de reprodução curtidas",
   "userLikedSongs": "Músicas curtidas",
   "userPlaylists": "Listas de reprodução",
-  "yourFavoriteSongsHere": "Suas músicas favoritas estaram aqui",
+  "yourFavoriteSongsHere": "Suas músicas favoritas estarão aqui",
   "youtubePlaylistID": "ID da lista de reprodução do YouTube"
 }

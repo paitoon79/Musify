@@ -32,19 +32,13 @@ final isAndroid = Platform.isAndroid;
 final appLanguages = <String, String>{
   'English': 'en',
   'Arabic': 'ar',
-  'Chinese': 'zh',
-  'Dutch': 'nl',
   'French': 'fr',
   'Georgian': 'ka',
   'German': 'de',
   'Greek': 'el',
-  'Indonesian': 'id',
-  'Italian': 'it',
   'Polish': 'pl',
   'Portuguese': 'pt',
-  'Russian': 'ru',
   'Spanish': 'es',
-  'Traditional Chinese Taiwan': 'zh_TW',
   'Turkish': 'tr',
   'Ukrainian': 'uk',
   'Vietnamese': 'vi',
@@ -226,12 +220,11 @@ Future<void> initialisation() async {
 
     audioHandler = await AudioService.init(
       builder: MyAudioHandler.new,
-      config: AudioServiceConfig(
+      config: const AudioServiceConfig(
         androidNotificationChannelId: 'com.gokadzev.musify',
         androidNotificationChannelName: 'Musify',
         androidNotificationIcon: 'mipmap/launcher_icon',
         androidShowNotificationBadge: true,
-        androidStopForegroundOnPause: !foregroundService.value,
       ),
     );
 

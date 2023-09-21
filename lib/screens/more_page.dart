@@ -371,31 +371,7 @@ class SettingsCards extends StatelessWidget {
             );
           },
         ),
-        if (isAndroid)
-          ValueListenableBuilder<bool>(
-            valueListenable: foregroundService,
-            builder: (_, foregroundValue, __) {
-              return SettingSwitchBar(
-                context.l10n()!.foregroundService,
-                FluentIcons.eye_24_filled,
-                foregroundValue,
-                (value) {
-                  addOrUpdateData(
-                    'settings',
-                    'foregroundService',
-                    value,
-                  );
 
-                  foregroundService.value = value;
-
-                  showToast(
-                    context,
-                    context.l10n()!.settingChangedAndRestartMsg,
-                  );
-                },
-              );
-            },
-          ),
         if (isAndroid)
           SettingBar(
             context.l10n()!.audioFileType,
@@ -591,6 +567,37 @@ class SettingsCards extends StatelessWidget {
           )
         else
           const SizedBox(),
+        // CATEGORY: BECOME A SPONSOR
+        Text(
+          context.l10n()!.becomeSponsor,
+          style: TextStyle(
+            color: colorScheme.primary,
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 6),
+          child: Card(
+            color: const Color(0xffFF5E5B),
+            child: ListTile(
+              leading:
+                  const Icon(FluentIcons.heart_24_filled, color: Colors.white),
+              title: Text(
+                context.l10n()!.sponsorProject,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () => {
+                launchURL(
+                  Uri.parse('https://ko-fi.com/gokadzev'),
+                ),
+              },
+            ),
+          ),
+        ),
         // CATEGORY: OTHERS
         Text(
           context.l10n()!.others,
@@ -599,15 +606,6 @@ class SettingsCards extends StatelessWidget {
             fontSize: 15,
             fontWeight: FontWeight.w400,
           ),
-        ),
-        SettingBar(
-          context.l10n()!.sponsorProject,
-          FluentIcons.heart_24_filled,
-          () => {
-            launchURL(
-              Uri.parse('https://ko-fi.com/gokadzev'),
-            ),
-          },
         ),
         SettingBar(
           context.l10n()!.licenses,
